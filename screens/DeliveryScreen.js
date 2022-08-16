@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/core'
 import { SafeAreaView, TouchableOpacity } from 'react-native';
@@ -7,8 +7,6 @@ import MapView, { Marker, PROVIDER_GOOGLE, MAP_TYPES } from "react-native-maps";
 import * as Progress from "react-native-progress";
 import { selectRestaurant } from '../features/restaurantSlice';
 import { useSelector } from "react-redux"
-import { StyleSheet, Dimensions } from 'react-native';
-
 
 const DeliveryScreen = () => {
     const navigation = useNavigation();
@@ -58,16 +56,17 @@ const DeliveryScreen = () => {
                     </Text>
                 </View>
         </SafeAreaView>
+        
         <View style={styles.container}>
             <MapView
-                // initialRegion={{
-                //     latitude: restaurant.lat,
-                //     longitude: restaurant.long,
-                //     latitudeDelta: 0.005,
-                //     longitudeDelta: 0.005,
-                // }}
-                // className="flex-1 mt-10 z-0 min-h-screen"
-                // mapType="mutedStandard"
+                initialRegion={{
+                    latitude: restaurant.lat,
+                    longitude: restaurant.long,
+                    latitudeDelta: 0.005,
+                    longitudeDelta: 0.005,
+                }}
+                className="flex-1 mt-10 z-0 min-h-screen"
+                mapType="mutedStandard"
                 style={styles.map}
             />
                 {/* <Marker 

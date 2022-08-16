@@ -35,8 +35,9 @@ const FeaturedRow = ({id, title, description}) => {
       <Text className="text-xs text-gray-500 px-4">{description}</Text>
 
       <ScrollView
-        horizontalcontentContainerStyle={{
-            paddingHorizontal: 15,
+        horizontal
+        contentContainerStyle={{
+          paddingHorizontal: 15,
         }}
         showsHorizontalScrollIndicator={false}
         className="pt-4" 
