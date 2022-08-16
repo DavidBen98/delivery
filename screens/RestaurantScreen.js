@@ -54,34 +54,12 @@ const RestaurantScreen = () => {
     }, []);
 
     const goBackAlert = () => {
-        const length = items.length;
-
-        if (length > 0) {
+        if (items.length > 0) {
             setShowAlert (true);
-
-
-            // Alert.alert(
-            //     "¿Go back?",
-            //     "You will lose the products you added to your order.",
-            //     [
-            //         {
-            //             text: "No, continue order",
-            //             // onPress: () => {},
-            //             style: "cancel"
-            //         },
-            //         { text: "Yes, go back", 
-            //             onPress: () => {
-            //                 dispatch(setRestaurant({}));
-            //                 dispatch(removeAllFromBasket());
-            //                 navigation.goBack();
-            //             } 
-            //         }
-            //     ]
-            // )
         } else {
             navigation.goBack();
         }
-    };
+    }
     
     return (
         <>
@@ -106,6 +84,16 @@ const RestaurantScreen = () => {
                     dispatch(removeAllFromBasket());
                     navigation.goBack();
                 }}
+                onDismiss = {() => setShowAlert(false)}
+                titleStyle={
+                    {
+                        fontSize: 24
+                    }
+                }
+                messageStyle= {{fontSize: 14}}
+                actionContainerStyle= {{ flexWrap: 'wrap'}}
+                cancelButtonTextStyle= {{ fontSize: 18 }}
+                confirmButtonTextStyle= {{ fontSize: 18 }}
             />
 
             <BasketIcon />

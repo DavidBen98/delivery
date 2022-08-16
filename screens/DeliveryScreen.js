@@ -12,19 +12,6 @@ const DeliveryScreen = () => {
     const navigation = useNavigation();
     const restaurant = useSelector(selectRestaurant);
 
-    const styles = StyleSheet.create({
-        container: {
-          flex: 1,
-          backgroundColor: '#fff',
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
-        map: {
-          width: '100%',
-          height: Dimensions.get('window').height,
-        },
-      });
-
     return (
         <View className="bg-[#00CCBB] flex-1">
         <SafeAreaView className="z-50">
@@ -52,33 +39,33 @@ const DeliveryScreen = () => {
                     <Progress.Bar size={30} color="#00CCBB" indeterminate={true} />
 
                     <Text className="mt-3 text-gray-500">
-                        Your order at {restaurant.title} is being prepared
+                        Your order at {restaurant.restaurant.title} is being prepared
                     </Text>
                 </View>
         </SafeAreaView>
         
-        <View style={styles.container}>
+        <View>
             <MapView
                 initialRegion={{
-                    latitude: restaurant.lat,
-                    longitude: restaurant.long,
+                    latitude: restaurant.restaurant.lat,
+                    longitude: restaurant.restaurant.long,
                     latitudeDelta: 0.005,
                     longitudeDelta: 0.005,
                 }}
-                className="flex-1 mt-10 z-0 min-h-screen"
+                className="flex-1 mt-10 z-0 min-h-screen w-[500px] h-[500px]"
                 mapType="mutedStandard"
-                style={styles.map}
+
             />
-                {/* <Marker 
+                <Marker 
                     coordinate={{
-                        latitude: restaurant.lat,
-                        longitude: restaurant.long,
+                        latitude: restaurant.restaurant.lat,
+                        longitude: restaurant.restaurant.long,
                     }}
-                    title={restaurant.title}
-                    description={restaurant.short_description}
+                    title={restaurant.restaurant.title}
+                    description={restaurant.restaurant.short_description}
                     identifier="origin"
                     pinColor="#00CCBB"
-                /> */}
+                />
             </View>
 
         <SafeAreaView className="bg-white flex-row items-center space-x-5 h-28">
