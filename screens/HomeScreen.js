@@ -11,11 +11,14 @@ import {
 import { ScrollView } from 'react-native';
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
-import sanityClient from '../sanity';
+import { getRestaurants } from "../api";
+
+import { config } from '../src/config';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [featuredCategories, setFeaturedCategories] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,19 +27,20 @@ const HomeScreen = () => {
 
   },[]);
 
-  useEffect(() => {
-    sanityClient.fetch(
-        `
-          *[_type == "featured"] {
-            ...,
-            dishes[] ->
-          }
-        `
-      ).then((data) => {
-        setFeaturedCategories(data);
-      })
-    }, [])
+  const getLocals = async () => {
+    try {
+      const restaurants = await getRestaurants();
+      setRestaurants(restaurants);
+    } catch (error) {
+      // console.log(error);
+    }
+  };
 
+  useEffect(() => {
+    getLocals();
+  }, []);
+
+  // console.log(restaurants);
 
   return (
     <>
@@ -84,14 +88,14 @@ const HomeScreen = () => {
       >
         <Categories />
 
-        {featuredCategories?.map((category) => (
+        {/* {featuredCategories?.map((category) => (
             <FeaturedRow
               key={category._id}
               id={category._id}
               title={category.name}
               description={category.short_description}
             />
-        ))}
+        ))} */}
       </ScrollView>
     </>
   );
