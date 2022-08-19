@@ -1,8 +1,8 @@
-import { REACT_APP_DB_HOST , REACT_APP_DB_USER, REACT_APP_DB_PASSWORD, REACT_APP_DB_DATABASE } from "@env"
+// import { DB } from "react-native-dotenv"
 
-export const config = {
-  host: REACT_APP_DB_HOST,
-  user: REACT_APP_DB_USER,
-  password: REACT_APP_DB_PASSWORD,
-  database: REACT_APP_DB_DATABASE,
-}
+// export const config = {
+//   host: DB.REACT_APP_DB_HOST,
+//   user: DB.REACT_APP_DB_USER,
+//   password: DB.REACT_APP_DB_PASSWORD,
+//   database: DB.REACT_APP_DB_DATABASE,
+// }

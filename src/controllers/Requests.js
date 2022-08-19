@@ -1,11 +1,35 @@
-import { connect } from "../database";
+import { connect } from "../database.js";
 
 export const getRestaurants = async (req, res) => {
-  console.log("aca llego")
   const connection = await connect();
-  // connection.then((a) => console.log(a)).catch((err) => console.error(err));
 
   const [rows] = await connection.execute("SELECT * FROM restaurant");
+  res.json(rows);
+};
+
+export const getCategoriesRestaurants = async (req, res) => {
+  const connection = await connect();
+
+  const [rows] = await connection.execute("SELECT * FROM categories_restaurant");
+  res.json(rows);
+};
+
+export const getRestaurantsForCategory = async (req, res) => {
+  const connection = await connect();
+
+  const query = "SELECT restaurant.id, restaurant.name, restaurant.city, restaurant.address, restaurant.latitude, restaurant.longitude, restaurant.phone, restaurant.opening_time, restaurant.closing_time FROM `restaurant` INNER JOIN category_restaurant ON restaurant.id = category_restaurant.restaurant_id INNER JOIN categories_restaurant ON categories_restaurant.id = category_restaurant.category_id WHERE category_restaurant.category_id = ?";
+
+  const [rows] = await connection.execute(query, [
+    req.params.id
+  ]);
+
+  res.json(rows);
+};
+
+export const getCategoriesDish = async (req, res) => {
+  const connection = await connect();
+
+  const [rows] = await connection.execute("SELECT * FROM categories_dish");
   res.json(rows);
 };
 

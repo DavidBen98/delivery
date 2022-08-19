@@ -1,4 +1,4 @@
-const API = "http://10.0.2.2:3000/restaurants";
+const API = "http://localhost:3000";
 
 export const deleteTask = async (id) => {
   await fetch(`${API}/${id}`, {
@@ -7,10 +7,24 @@ export const deleteTask = async (id) => {
 };
 
 export const getRestaurants = async () => {
-  const res = await fetch(API, {
-    method: "GET",
-  });
-  
+  const res = await fetch(API+"/restaurants");
+  return await res.json();
+};
+
+export const getCategoriesRestaurants = async () => {
+  const res = await fetch(API+"/categories/restaurants");
+
+  return await res.json();
+};
+
+export const getRestaurantsForCategory = async (id) => {
+  const res = await fetch(`${API}/categories/restaurants/${id}`);
+  console.log(`${API}/categories/restaurants/${id}`);
+  return await res.json();
+};
+
+export const getCategoriesDish = async () => {
+  const res = await fetch(API+"/categories/dish");
   return await res.json();
 };
 

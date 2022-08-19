@@ -3,27 +3,26 @@ import React, { useState, useEffect } from 'react'
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import RestaurantCard from './RestaurantCard'
 import sanityClient, {urlFor} from "../sanity";
+import { getRestaurants, getCategoriesDish, getCategoriesRestaurants, getRestaurantsForCategory } from "../api";
 
-const FeaturedRow = ({id, title, description}) => {
+const FeaturedRow = ({id, title}) => {
   const [restaurants, setRestaurants] = useState([]);
 
+  const getLocaleForCategory = async () => {
+    try {
+      const restaurants = await getRestaurantsForCategory(id);
+      setRestaurants(restaurants);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(restaurants);
+
   useEffect(() =>{
-    sanityClient.fetch(`
-      *[_type == "featured" && _id == $id] {
-        ...,
-        restaurants[]->{
-          ...,
-          dishes[]->,
-          type-> {
-            name
-          }
-        },
-      }[0]
-    `, { id }
-    ).then((data) => {
-      setRestaurants(data?.restaurants);
-    });
+    getLocaleForCategory();
   },[]);
+
 
   return (
     <View>
@@ -31,8 +30,6 @@ const FeaturedRow = ({id, title, description}) => {
         <Text className="font-bold text-lg">{title}</Text>
         <ArrowRightIcon color="#00CCBB"/>
       </View>
-
-      <Text className="text-xs text-gray-500 px-4">{description}</Text>
 
       <ScrollView
         horizontal
@@ -44,17 +41,18 @@ const FeaturedRow = ({id, title, description}) => {
       >
           {restaurants?.map((restaurant) => (
             <RestaurantCard
-              key={restaurant._id}
-              id={restaurant._id}
-              imgUrl={restaurant.Image}
+              key={restaurant.id}
+              id={restaurant.id}
+              // imgUrl={restaurant.Image}
               title={restaurant.name}
-              dishes={restaurant.dishes}
-              genre={restaurant.type?.name}
+              // dishes={restaurant.dishes}
+              // genre={restaurant.type?.name}
+              phone={restaurant.phone}
               address={restaurant.address}
-              rating={restaurant.rating}
-              short_description={restaurant.short_description}
-              long={restaurant.long}
-              lat={restaurant.lat}
+              // rating={restaurant.rating}
+              // short_description={restaurant.short_description}
+              long={restaurant.longitude}
+              lat={restaurant.latitude}
             />
           ))}
       </ScrollView>

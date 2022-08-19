@@ -11,13 +11,12 @@ import {
 import { ScrollView } from 'react-native';
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
-import { getRestaurants } from "../api";
-
-import { config } from '../src/config';
+import { getRestaurants, getCategoriesDish, getCategoriesRestaurants } from "../api";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const [featuredCategories, setFeaturedCategories] = useState([]);
+  const [featuredCategoriesDish, setFeaturedCategoriesDish] = useState([]);
+  const [featuredCategoriesRestaurants, setFeaturedCategoriesRestaurants] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
 
   useLayoutEffect(() => {
@@ -27,20 +26,18 @@ const HomeScreen = () => {
 
   },[]);
 
-  const getLocals = async () => {
+  const getCategoriesLocale = async () => {
     try {
-      const restaurants = await getRestaurants();
-      setRestaurants(restaurants);
+      const categoriesRestaurants = await getCategoriesRestaurants();
+      setFeaturedCategoriesRestaurants(categoriesRestaurants);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    getLocals();
+    getCategoriesLocale();
   }, []);
-
-  // console.log(restaurants);
 
   return (
     <>
@@ -86,16 +83,15 @@ const HomeScreen = () => {
           paddingBottom: 100,
         }}
       >
-        <Categories />
+        {/* <Categories /> */}
 
-        {/* {featuredCategories?.map((category) => (
+        {featuredCategoriesRestaurants?.map((category) => (
             <FeaturedRow
-              key={category._id}
-              id={category._id}
+              key={category.id}
+              id={category.id}
               title={category.name}
-              description={category.short_description}
             />
-        ))} */}
+        ))}
       </ScrollView>
     </>
   );
