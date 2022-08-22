@@ -12,14 +12,13 @@ export const getRestaurants = async () => {
 };
 
 export const getCategoriesRestaurants = async () => {
-  const res = await fetch(API+"/categories/restaurants");
+  const res = await fetch(`${API}/categories/restaurants`);
 
   return await res.json();
 };
 
 export const getRestaurantsForCategory = async (id) => {
   const res = await fetch(`${API}/categories/restaurants/${id}`);
-  console.log(`${API}/categories/restaurants/${id}`);
   return await res.json();
 };
 
@@ -28,32 +27,23 @@ export const getCategoriesDish = async () => {
   return await res.json();
 };
 
-export const saveTask = async (newTask) => {
-  const res = await fetch(API, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newTask),
-  });
+export const getAllDishes = async () => {
+  const res = await fetch(API+"/categories/dish/dishes");
   return await res.json();
 };
 
-export const getTask = async (taskId) => {
-  const res = await fetch(`${API}/${taskId}`);
+export const getDishesForCategory = async (idCategory) => {
+  const res = await fetch(`${API}"/categories/dish/dishes/${idCategory}`);
   return await res.json();
 };
 
-export const updateTask = async (taskId, newTask) => {
-  // console.log(taskId, newTask)
-  const res = await fetch(`${API}/${taskId}`, {
-    method: "PUT",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newTask),
-  });
-  return res;
+export const getDishesForRestaurant = async (idRestaurant) => {
+  const res = await fetch(`${API}/categories/dish/dishes/restaurant/${idRestaurant}`);
+  return await res.json();
 };
+
+
+export const getCategoriesForRestaurant = async (idRestaurant) => {
+  const res = await fetch(`${API}/restaurants/category/${idRestaurant}`);
+  return await res.json();
+}

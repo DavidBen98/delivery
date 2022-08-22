@@ -5,6 +5,10 @@ import {
   getCategoriesRestaurants,
   getCategoriesDish,
   getRestaurantsForCategory,
+  getAllDishes,
+  getDishesForCategory,
+  getDishesForRestaurant,
+  getCategoriesForRestaurant
   // saveTask,
   // getTask,
   // updateTask,
@@ -21,6 +25,13 @@ router.get("/categories/restaurants/:id", getRestaurantsForCategory); //obtener 
 
 router.get("/categories/dish", getCategoriesDish); //obtener categorias de platos
 
+router.get("/categories/dish/dishes", getAllDishes); //obtener todos los platos
+
+router.get("/categories/dish/dishes/:idCategory", getDishesForCategory); //obtener platos por categorias
+
+router.get("/categories/dish/dishes/restaurant/:idRestaurant", getDishesForRestaurant); //obtener platos por restaurant
+
+router.get("/restaurants/category/:idRestaurant", getCategoriesForRestaurant); //obtener platos por restaurant
 
 // router.get("/tasks/count", getTasksCount);
 
