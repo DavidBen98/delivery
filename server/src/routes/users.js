@@ -8,7 +8,8 @@ import {
   getAllDishes,
   getDishesForCategory,
   getDishesForRestaurant,
-  getCategoriesForRestaurant
+  getCategoriesForRestaurant,
+  getRestaurantForId
   // saveTask,
   // getTask,
   // updateTask,
@@ -18,6 +19,8 @@ import {
 const router = Router();
 
 router.get("/restaurants", getRestaurants);
+
+router.get("/restaurants/:id", getRestaurantForId);
 
 router.get("/categories/restaurants", getCategoriesRestaurants); //obtener categorias de restaurantes
 

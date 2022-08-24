@@ -61,7 +61,7 @@ const RestaurantScreen = () => {
             const categories = await getCategoriesForRestaurant(idRestaurant);
             setCategories (categories.category);
         } catch (error) {
-            console.log(error);
+            console.log(error); 
         }
     }
     

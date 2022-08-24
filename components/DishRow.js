@@ -7,7 +7,7 @@ import { addToBasket, selectBasketItemsWithId, removeFromBasket } from '../featu
 import tw from 'twrnc';
 
 const DishRow = ({
-    id, name, description, price, image
+    id, name, price, description
 }) => {
 
     const [isPressed, setIsPressed] = useState(false);
@@ -15,7 +15,7 @@ const DishRow = ({
     const dispatch = useDispatch();
 
     const addItemToBasket = () => {
-        dispatch(addToBasket({id, name, description, price,image}))
+        dispatch(addToBasket({id, name, price, description}))
     }
     
     const removeItemFromBasket = () => {
@@ -30,7 +30,7 @@ const DishRow = ({
         <>
             <TouchableOpacity 
                 onPress={() => setIsPressed(!isPressed)}
-                style={`bg-white border p-4 border-gray-200 ${isPressed && "border-b-0"}`}
+                // style={`bg-white border p-4 border-gray-200 ${isPressed && "border-b-0"}`}
             >
                 <View style={tw `flex-row`}>
                     <View style={tw `flex-1 pr-2`}>
@@ -40,7 +40,7 @@ const DishRow = ({
                             {/* <Currency quantity={price} currency="GBP" /> */}
                         </Text>
                     </View>
-                    <View>
+                    {/* <View> */}
                         {/* <Image
                             style={{
                                 borderWidth: 1,
@@ -49,7 +49,7 @@ const DishRow = ({
                             source={{ uri: urlFor(image).url() }}
                             style={tw `h-20 w-20 bg-gray-300 p-4"
                             /> */}
-                    </View>
+                    {/* </View> */}
                 </View>
             </TouchableOpacity>
 

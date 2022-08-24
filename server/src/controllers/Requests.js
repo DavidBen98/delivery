@@ -9,6 +9,15 @@ export const getRestaurants = async (req, res) => {
   res.json(rows);
 };
 
+export const getRestaurantForId = async (req, res) => {
+  const connection = await connect();
+
+  const [rows] = await connection.execute("SELECT * FROM restaurant WHERE id = ?", [
+    req.params.id
+  ]);
+  res.json(rows);
+};
+
 export const getCategoriesRestaurants = async (req, res) => {
   const connection = await connect();
 
@@ -82,9 +91,14 @@ export const getDishesForRestaurant = async (req, res) => {
 export const getDishesForCategory = async (req, res) => {
   const connection = await connect();
 
-  const [rows] = await connection.execute("SELECT * FROM dishes WHERE category_id = ?", [
-    req.params.id
+  const [rows] = await connection.execute("SELECT dish.id, dish.name, dish.short_description, dish.price, dish.photo, dish.restaurant_id FROM `dish` INNER JOIN category_dish ON dish.id = category_dish.dish_id WHERE category_dish_id = ?", [
+    req.params.idCategory
   ]);
+
+  rows.map(dish => (
+    fs.writeFileSync(path.join(__dirname, '../../dbimages/dishes/' + dish.id + ".png"),
+    dish.photo)
+  ));
   
   res.json(rows);
 };

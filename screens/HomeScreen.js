@@ -9,28 +9,35 @@ import {
   AdjustmentsIcon,
 } from "react-native-heroicons/outline"
 import { ScrollView } from 'react-native';
-import Categories from '../components/Categories';
+import CategoriesDish from '../components/CategoriesDish';
 import FeaturedRow from '../components/FeaturedRow';
 import { getRestaurants, getCategoriesDish, getCategoriesRestaurants } from "../api";
 import tw from 'twrnc';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const [featuredCategoriesDish, setFeaturedCategoriesDish] = useState([]);
-  const [featuredCategoriesRestaurants, setFeaturedCategoriesRestaurants] = useState([]);
-  const [restaurants, setRestaurants] = useState([]);
+  const [categoriesRestaurants, setCategoriesRestaurants] = useState([]);
+  const [categoriesDishes, setCategoriesDishes] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
-
   },[]);
 
   const getCategoriesLocale = async () => {
     try {
       const categoriesRestaurants = await getCategoriesRestaurants();
-      setFeaturedCategoriesRestaurants(categoriesRestaurants);
+      setCategoriesRestaurants(categoriesRestaurants);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCategoriesPlate = async () => {
+    try {
+      const categoriesDishes = await getCategoriesDish();
+      setCategoriesDishes(categoriesDishes);
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +45,8 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getCategoriesLocale();
-  }, []);
+    getCategoriesPlate();
+  }, []); 
 
   return (
     <>
@@ -84,10 +92,16 @@ const HomeScreen = () => {
           paddingBottom: 100,
         }}
       >
-        {/* <Categories /> */}
-
-        {featuredCategoriesRestaurants?.map((category) => (
+        {categoriesRestaurants?.map((category) => (
             <FeaturedRow
+              key={category.id}
+              id={category.id}
+              title={category.name}
+            />
+        ))}
+
+        {categoriesDishes?.map((category) => (
+            <CategoriesDish
               key={category.id}
               id={category.id}
               title={category.name}

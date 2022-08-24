@@ -22,10 +22,6 @@ const RestaurantCard = ({
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    
-  }, []);
-
   return (
     <TouchableOpacity 
       onPress={() => {
@@ -47,7 +43,6 @@ const RestaurantCard = ({
                 <Text style={tw `text-green-500`}>
                   {rating + " "}
                 </Text> 
-                - {genre}
             </Text> */}
         </View>
 
@@ -55,10 +50,6 @@ const RestaurantCard = ({
             <LocationMarkerIcon color="gray" opacity={0.4} size={22} />
             <Text style={tw `text-xs text-gray-500`}>{address}</Text>
         </View>
-{/* 
-        <View style={tw `flex-row items-center space-x-1 mt-1`}>
-          <Text style={tw `text-xs text-gray-500 pl-1`}>{short_description}</Text>
-        </View> */}
       </View>
     </TouchableOpacity>
   )
