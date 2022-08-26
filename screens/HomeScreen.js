@@ -105,6 +105,8 @@ const HomeScreen = () => {
               key={category.id}
               id={category.id}
               title={category.name}
+              screen= "Home"
+              plates=""
             />
         ))}
       </ScrollView>

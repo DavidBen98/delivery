@@ -21,7 +21,7 @@ export const getRestaurantForId = async (req, res) => {
 export const getCategoriesRestaurants = async (req, res) => {
   const connection = await connect();
 
-  const [rows] = await connection.execute("SELECT * FROM categories_restaurant");
+  const [rows] = await connection.execute("SELECT * FROM categories_restaurant WHERE active = 1");
   res.json(rows);
 };
 
@@ -51,7 +51,6 @@ export const getRestaurantsForCategory = async (req, res) => {
 export const getCategoriesForRestaurant = async (req, res) => {
   const connection = await connect();
 
-  // const query = "SELECT categories_dish.name, dish.name FROM categories_dish INNER JOIN category_dish ON category_dish.category_dish_id = categories_dish.id INNER JOIN dish ON category_dish.dish_id = dish.id WHERE dish.restaurant_id = ?";
   const query = "SELECT categories_dish.name as category, dish.name as dish " + 
   "FROM categories_dish " +
   "INNER JOIN category_dish ON category_dish.category_dish_id = categories_dish.id " +
@@ -67,7 +66,7 @@ export const getCategoriesForRestaurant = async (req, res) => {
 export const getCategoriesDish = async (req, res) => {
   const connection = await connect();
 
-  const [rows] = await connection.execute("SELECT * FROM categories_dish");
+  const [rows] = await connection.execute("SELECT * FROM categories_dish WHERE active = 1");
   res.json(rows);
 };
 
@@ -102,3 +101,26 @@ export const getDishesForCategory = async (req, res) => {
   
   res.json(rows);
 };
+
+
+export const getDishesForCategoryOfRestaurant = async (req, res) => {
+  const connection = await connect();
+
+  const query = "SELECT category_dish.category_dish_id as category_id, categories_dish.name as category_name, dish.id, dish.name, " + 
+  "dish.short_description, dish.price, dish.photo " + 
+  "FROM `category_dish` " + 
+  "INNER JOIN categories_dish on categories_dish.id = category_dish.category_dish_id " +
+  "INNER JOIN dish on dish.id = category_dish.dish_id " +
+  "WHERE dish.restaurant_id = ? AND categories_dish.active = 1";
+
+  const [rows] = await connection.execute(query, [
+    req.params.idRestaurant
+  ]);
+
+  rows.map(dish => (
+    fs.writeFileSync(path.join(__dirname, '../../dbimages/dishes/' + dish.id + ".png"),
+    dish.photo)
+  ));
+  
+  res.json(rows);
+}

@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import RestaurantCard from './RestaurantCard'
-import { getRestaurants, getCategoriesDish, getCategoriesRestaurants, getRestaurantsForCategory } from "../api";
+import { getRestaurantsForCategory } from "../api";
 import tw from 'twrnc';
 
 const FeaturedRow = ({id, title}) => {

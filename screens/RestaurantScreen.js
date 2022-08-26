@@ -10,26 +10,23 @@ import { setRestaurant, selectRestaurant} from '../features/restaurantSlice';
 import { selectBasketItems, removeAllFromBasket } from '../features/basketSlice';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import tw from 'twrnc';
-import { getCategoriesForRestaurant } from "../api";
-
+import { getDishesForCategoryOfRestaurant } from "../api";
+import { ArrowRightIcon } from 'react-native-heroicons/outline'
+import CategoriesDish from '../components/CategoriesDish';
 
 const RestaurantScreen = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const items = useSelector(selectBasketItems);
     const [showAlert, setShowAlert] = useState (false);
+    const [dishes, setDishes] = useState([]);
     const [categories, setCategories] = useState([]);
 
     const {
         params: {
             id,
-            // imgUrl,
             title,
-            // rating,
-            // genre,
             address,
-            // short_description,
-            // dishes,
             long,
             lat,
             phone
@@ -39,13 +36,8 @@ const RestaurantScreen = () => {
     useEffect(() => {
         dispatch(setRestaurant({
             id,
-            // imgUrl,
             title,
-            // rating,
-            // genre,
             address,
-            // short_description,
-            // dishes,
             phone,
             long,
             lat,
@@ -53,13 +45,14 @@ const RestaurantScreen = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        getCategoriesForLocale(id);
+        getDishesForLocalAndCategory(id);
     },[]);
 
-    const getCategoriesForLocale = async (idRestaurant) => {
+    const getDishesForLocalAndCategory = async (idRestaurant) => {
         try {
-            const categories = await getCategoriesForRestaurant(idRestaurant);
-            setCategories (categories.category);
+            const dishes = await getDishesForCategoryOfRestaurant(idRestaurant);
+            setDishes (dishes);
+            getCategoriesOfDishes(dishes);
         } catch (error) {
             console.log(error); 
         }
@@ -78,7 +71,18 @@ const RestaurantScreen = () => {
             navigation.goBack();
         }
     }
-    
+
+    const getCategoriesOfDishes = (dishes) => {
+        const result = dishes.reduce((acc,item)=>{
+            if(!acc.includes(item.category_name)){
+                acc.push([item.category_id, item.category_name]);
+            }
+            return acc;
+        },[]);
+
+        setCategories(result);
+    }
+
     return (
         <>
             <AwesomeAlert
@@ -177,16 +181,23 @@ const RestaurantScreen = () => {
                         Menu
                     </Text>
 
-                    {/* {dishes.map((dish) => (
-                        <DishRow 
-                            key={dish._id}
-                            id={dish._id}
-                            name={dish.name}
-                            description={dish.short_description}
-                            price={dish.price}
-                            image={dish.image}
-                        />
-                    ))} */}
+
+                    <ScrollView 
+                        style={tw `bg-gray `}
+                        contentContainerStyle={{
+                        paddingBottom: 100,
+                        }}
+                    >
+                        {categories?.map((category) => (
+                            <CategoriesDish
+                                key={category[0]}
+                                id={category[0]}
+                                title={category[1]}
+                                screen= "Restaurant"
+                                plates = {dishes}
+                            />
+                        ))}
+                    </ScrollView>
                 </View>
             </ScrollView>
         </>

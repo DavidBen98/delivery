@@ -46,3 +46,8 @@ export const getCategoriesForRestaurant = async (idRestaurant) => {
   const res = await fetch(`${API}/restaurants/category/${idRestaurant}`);
   return await res.json();
 }
+
+export const getDishesForCategoryOfRestaurant = async (idRestaurant) => {
+  const res = await fetch(`${API}/restaurants/dishes/${idRestaurant}`);
+  return await res.json();
+}

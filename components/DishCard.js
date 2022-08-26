@@ -60,7 +60,7 @@ const DishCard = ({
             <TouchableOpacity 
                 onPress={() => {
                     navigation.navigate('Restaurant', { id: restaurant[0].id, title: restaurant[0].name, address: restaurant[0].address, long: restaurant[0].longitude, lat: restaurant[0].latitude, phone: restaurant[0].phone});
-                }}
+                }} 
             >
                 <HomeIcon color="gray" opacity={0.4} size={22} />
                 <Text style={tw `text-xs text-gray-500`}>{restaurant[0]?.name}</Text>

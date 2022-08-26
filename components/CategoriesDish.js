@@ -5,8 +5,7 @@ import tw from 'twrnc';
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import DishCard from './DishCard';
 
-
-const CategoriesDish = ({id, title}) => {
+const CategoriesDish = ({id, title, screen, plates}) => {
   const [dishes, setDishes] = useState([]);
 
   const getPlatesForCategory = async () => {
@@ -19,7 +18,11 @@ const CategoriesDish = ({id, title}) => {
   };
 
   useEffect(() =>{
-    getPlatesForCategory();
+    if (screen === "Home"){
+      getPlatesForCategory();
+    } else if (screen === "Restaurant"){
+      setDishes(plates);
+    }
   },[]);
 
   return (
@@ -37,7 +40,8 @@ const CategoriesDish = ({id, title}) => {
         showsHorizontalScrollIndicator={false}
         style={tw `pt-4`}
       >
-          {dishes?.map((dish) => (
+          {screen==="Home" &&
+          dishes?.map((dish) => (
             <DishCard 
               key={dish.id}
               id={dish.id}
@@ -46,6 +50,19 @@ const CategoriesDish = ({id, title}) => {
               description={dish.short_description}
               restaurant_id={dish.restaurant_id}
             />
+          ))}
+
+          {screen==="Restaurant" &&
+            dishes?.map((dish) => (
+              dish.category_id === id &&
+                <DishCard 
+                  key={dish.id}
+                  id={dish.id}
+                  name={dish.name}
+                  price={dish.price}
+                  description={dish.short_description}
+                  restaurant_id={dish.restaurant_id}
+                />
           ))}
       </ScrollView>
     </View>
