@@ -50,7 +50,7 @@ const CategoriesDish = ({id, title, screen, plates}) => {
               description={dish.short_description}
               restaurant_id={dish.restaurant_id}
             />
-          ))}
+          ))} 
 
           {screen==="Restaurant" &&
             dishes?.map((dish) => (
@@ -63,7 +63,8 @@ const CategoriesDish = ({id, title, screen, plates}) => {
                   description={dish.short_description}
                   restaurant_id={dish.restaurant_id}
                 />
-          ))}
+           ))
+          }
       </ScrollView>
     </View>
   )

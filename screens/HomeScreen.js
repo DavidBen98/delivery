@@ -11,7 +11,7 @@ import {
 import { ScrollView } from 'react-native';
 import CategoriesDish from '../components/CategoriesDish';
 import FeaturedRow from '../components/FeaturedRow';
-import { getRestaurants, getCategoriesDish, getCategoriesRestaurants } from "../api";
+import { getCategoriesDish, getCategoriesRestaurants } from "../api";
 import tw from 'twrnc';
 
 const HomeScreen = () => {

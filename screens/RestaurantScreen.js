@@ -29,7 +29,9 @@ const RestaurantScreen = () => {
             address,
             long,
             lat,
-            phone
+            phone,
+            averageOpinions,
+            opinions
         }
     } = useRoute();
     
@@ -74,12 +76,11 @@ const RestaurantScreen = () => {
 
     const getCategoriesOfDishes = (dishes) => {
         const result = dishes.reduce((acc,item)=>{
-            if(!acc.includes(item.category_name)){
-                acc.push([item.category_id, item.category_name]);
+            if(!acc.some(e => e.id === item.category_id)){
+                acc.push({id: item.category_id, name: item.category_name});
             }
             return acc;
         },[]);
-
         setCategories(result);
     }
 
@@ -145,26 +146,34 @@ const RestaurantScreen = () => {
                         <Text style={tw `text-3xl font-bold`}>
                             {title}
                         </Text>
-                        <View style={tw `flex-row space-x-2 my-1`}>
-                            {/* <View style={tw `flex-row items-center space-x-2">
-                                <StarIcon color="green" opacity={0.5} size={22} />
-                                <Text style={tw `text-xs text-gray-500">
-                                    <Text style={tw `text-green-500">
-                                        {rating + " "} 
-                                    </Text> 
-                                    - {genre}
-                                </Text>
-                            </View> */}
+                    </View>
 
-                            <View style={tw `flex-row items-center space-x-2`}>
-                                <LocationMarkerIcon color="gray" opacity={0.4} size={22} />
-                                <Text style={tw `text-xs text-gray-500`}>
-                                    {address}
-                                </Text>
-                            </View>
-                        </View>
+                    <View style={tw `flex-row items-center space-x-2 px-4 pt-2`}>
+                        <LocationMarkerIcon color="gray" opacity={0.4} size={22} />
+                        <Text style={tw `text-xs text-gray-500`}>
+                            {address}
+                        </Text>
+                    </View>
 
-                        {/* <Text style={tw `mt-1 pb-4">{short_description}</Text> */}
+                    <View style={tw `flex-row items-center space-x-1 px-4 pt-2`}>
+                        <StarIcon color="green" opacity={0.5} size={22} />
+                        <Text style={tw `text-xs`}>
+                            <Text style={tw `text-green-500 font-bold text-base p-1`}>
+                                {opinions.length? averageOpinions + " " : "5.0"}
+                            </Text> 
+                            <Text style={tw `text-grey-500 text-base p-1`}>
+                                {opinions.length > 0 &&  "(" + opinions.length + ")" }
+                            </Text> 
+                            <TouchableOpacity
+                                onPress={() => {}}
+                                style={tw `flex-row items-center`}
+                            >
+                                <Text style={tw `text-black-500 font-bold text-base p-1`}>
+                                    Read opinions
+                                </Text> 
+                                <ChevronRightIcon color="#000"/>
+                            </TouchableOpacity>
+                        </Text>
                     </View>
 
                     <TouchableOpacity style={tw `flex-row items-center space-x-2 p-4 border-y border-gray-300`}>
@@ -190,9 +199,9 @@ const RestaurantScreen = () => {
                     >
                         {categories?.map((category) => (
                             <CategoriesDish
-                                key={category[0]}
-                                id={category[0]}
-                                title={category[1]}
+                                key={category.id}
+                                id={category.id}
+                                title={category.name}
                                 screen= "Restaurant"
                                 plates = {dishes}
                             />

@@ -107,7 +107,7 @@ export const getDishesForCategoryOfRestaurant = async (req, res) => {
   const connection = await connect();
 
   const query = "SELECT category_dish.category_dish_id as category_id, categories_dish.name as category_name, dish.id, dish.name, " + 
-  "dish.short_description, dish.price, dish.photo " + 
+  "dish.short_description, dish.price, dish.photo, dish.restaurant_id " + 
   "FROM `category_dish` " + 
   "INNER JOIN categories_dish on categories_dish.id = category_dish.category_dish_id " +
   "INNER JOIN dish on dish.id = category_dish.dish_id " +
@@ -124,3 +124,15 @@ export const getDishesForCategoryOfRestaurant = async (req, res) => {
   
   res.json(rows);
 }
+
+export const getOpinionsForRestaurant = async (req, res) => {
+  const connection = await connect();
+
+  const [rows] = await connection.execute("SELECT opinions.id, opinions.description, opinions.date, opinions.user_id, opinions.stars " +
+    "FROM `opinions` " + 
+    "WHERE restaurant_id = ?", [
+    req.params.idRestaurant
+  ]);
+  
+  res.json(rows);
+};

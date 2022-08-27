@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  // deleteTask,
   getRestaurants,
   getCategoriesRestaurants,
   getCategoriesDish,
@@ -10,11 +9,8 @@ import {
   getDishesForRestaurant,
   getCategoriesForRestaurant,
   getRestaurantForId,
-  getDishesForCategoryOfRestaurant
-  // saveTask,
-  // getTask,
-  // updateTask,
-  // getTasksCount,
+  getDishesForCategoryOfRestaurant,
+  getOpinionsForRestaurant
 } from "../controllers/Requests.js";
 
 const router = Router();
@@ -25,9 +21,11 @@ router.get("/restaurants/:id", getRestaurantForId);
 
 router.get("/restaurants/dishes/:idRestaurant", getDishesForCategoryOfRestaurant); //obtener platos por restaurant
 
-router.get("/categories/restaurants", getCategoriesRestaurants); //obtener categorias de restaurantes
-
 router.get("/restaurants/category/:idRestaurant", getCategoriesForRestaurant); //obtener platos por restaurant
+
+router.get("/restaurants/opinions/:idRestaurant", getOpinionsForRestaurant); //obtener platos por restaurant
+
+router.get("/categories/restaurants", getCategoriesRestaurants); //obtener categorias de restaurantes
 
 router.get("/categories/restaurants/:id", getRestaurantsForCategory); //obtener restaurantes segun categorias de restaurantes
 
