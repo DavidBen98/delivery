@@ -10,6 +10,7 @@ import PreparingOrderScreen from './screens/PreparingOrderScreen';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import ImageScreen from './screens/ImageScreen';
+import OpinionsScreen from './screens/OpinionsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,8 @@ export default function App() {
               options={{ presentation: 'fullScreenModal', headerShown:false }}
             /> */}
             <Stack.Screen name="Image" component={ImageScreen} 
+            options={{ presentation: 'modal', headerShown:false }}/>
+            <Stack.Screen name="Opinions" component={OpinionsScreen} 
             options={{ presentation: 'modal', headerShown:false }}/>
           </Stack.Navigator>
       </Provider>

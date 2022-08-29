@@ -165,7 +165,7 @@ const RestaurantScreen = () => {
                                 {opinions.length > 0 &&  "(" + opinions.length + ")" }
                             </Text> 
                             <TouchableOpacity
-                                onPress={() => {}}
+                                onPress={() => {navigation.navigate("Opinions", {opinions})}}
                                 style={tw `flex-row items-center`}
                             >
                                 <Text style={tw `text-black-500 font-bold text-base p-1`}>
