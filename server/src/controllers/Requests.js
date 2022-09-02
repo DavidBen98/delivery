@@ -128,11 +128,18 @@ export const getDishesForCategoryOfRestaurant = async (req, res) => {
 export const getOpinionsForRestaurant = async (req, res) => {
   const connection = await connect();
 
-  const [rows] = await connection.execute("SELECT opinions.id, opinions.description, opinions.date, opinions.user_id, opinions.stars " +
+  const [rows] = await connection.execute("SELECT opinions.id, opinions.description, opinions.date, opinions.user_id, opinions.stars, " +
+    "user.photo as user_photo, user.first_name as first_name " +
     "FROM `opinions` " + 
+    "INNER JOIN `user` ON user.id = opinions.user_id " +
     "WHERE restaurant_id = ?", [
     req.params.idRestaurant
   ]);
+
+  rows.map(opinion => (
+    fs.writeFileSync(path.join(__dirname, '../../dbimages/users/' + opinion.user_id + ".png"),
+    opinion.user_photo)
+  ));
   
   res.json(rows);
 };
