@@ -20,7 +20,7 @@ const OpinionsScreen = () => {
         (
             <>
                 <View style={{ height: '100%', width: '100%' }}>
-                    <View style={tw `flex p-5 flex-row items-center border-b border-gray-400 border-solid`}>
+                    <View style={tw `flex p-5 flex-row items-center border-b border-black-500 border-solid`}>
                         <TouchableOpacity
                             onPress={navigation.goBack}
                             style={tw `bg-gray-100 rounded-full`}
@@ -49,11 +49,11 @@ const OpinionsScreen = () => {
         (
             <>
                 <View style={{ height: '100%', width: '100%' }}>
-                    <View style={tw `flex p-5 flex-row items-center border-b border-gray-400 border-solid`}>
+                    <View style={tw `flex p-5 flex-row items-center border-b border-black-500 border-solid`}>
                         <TouchableOpacity
                             onPress={navigation.goBack}
                             style={tw `bg-gray-100 rounded-full`}
-                            >
+                        >
                             <ArrowLeftIcon size={20} color="#00CCBB" />
                         </TouchableOpacity>
 
@@ -75,17 +75,19 @@ const OpinionsScreen = () => {
                                                 style={{resizeMode: "stretch", width: "30px", height: "30px", backgroundColor: "rgb(209 213 219)", padding: "1rem", borderRadius: "50%"}}
                                                 />
                                         </View>
-                                        <View style={tw `text-xs flex wrap w-11/12 relative pl-2 pt-2`}>
-                                            <View style={tw `flex flex-row`}>
-                                                <Text style={tw `font-semibold px-2`}>{opinion.first_name}</Text>
-                                                {
-                                                    stars.map((star) => (
-                                                        <StarIcon key={star + 1} color="green" opacity={0.5} size={22} />
-                                                        ))
-                                                }                                                                        
+                                        <View style={tw `text-xs flex wrap w-10/12 pt-2`}>
+                                            <View style={tw `flex flex-row justify-between`}>
+                                                <View style={tw `flex flex-row`}>
+                                                    <Text style={tw `font-semibold px-2`}>{opinion.first_name}</Text>
+                                                    {
+                                                        stars.map((star) => (
+                                                            <StarIcon key={star + 1} color="green" opacity={0.5} size={22} />
+                                                            ))
+                                                        }                                                                        
+                                                </View>
+                                                <Text>{opinion.date.substr(8,2) + "-" + opinion.date.substr(5,2) + "-" + opinion.date.substr(0,4)}</Text>
                                             </View>  
                                             <Text style={tw `p-2 mb-1`}>{opinion.description}</Text>
-                                            <Text style={tw `absolute top-4 right-4`}>{opinion.date.substr(8,2) + "-" + opinion.date.substr(5,2) + "-" + opinion.date.substr(0,4)}</Text>
                                         </View>
                                     </View>
                                 </>
