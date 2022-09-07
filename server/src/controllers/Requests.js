@@ -143,3 +143,16 @@ export const getOpinionsForRestaurant = async (req, res) => {
   
   res.json(rows);
 };
+
+export const getUser = async (req, res) => {
+  const connection = await connect();
+
+  const [rows] = await connection.execute(
+    "SELECT * FROM user " +
+    "WHERE username = ? AND password =?", [
+    req.params.user,
+    req.params.password
+  ]);
+  
+  res.json(rows);
+};

@@ -10,7 +10,8 @@ import {
   getCategoriesForRestaurant,
   getRestaurantForId,
   getDishesForCategoryOfRestaurant,
-  getOpinionsForRestaurant
+  getOpinionsForRestaurant,
+  getUser
 } from "../controllers/Requests.js";
 
 const router = Router();
@@ -36,5 +37,7 @@ router.get("/categories/dish/dishes", getAllDishes); //obtener todos los platos
 router.get("/categories/dish/dishes/:idCategory", getDishesForCategory); //obtener platos por categorias
 
 router.get("/categories/dish/dishes/restaurant/:idRestaurant", getDishesForRestaurant); //obtener platos por restaurant
+
+router.get("/users/:user/:password", getUser);
 
 export default router;

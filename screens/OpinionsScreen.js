@@ -68,15 +68,15 @@ const OpinionsScreen = () => {
 
                             return (
                                 <>
-                                    <View key={opinion.id} style={tw `text-xs w-full flex wrap m-1 flex-row border-b border-gray-300 border-solid`}>
-                                        <View style={tw `flex justify-center ml-2`}>
+                                    <View key={opinion.id} style={tw `text-xs w-full flex wrap justify-around m-1 p-1 flex-row border-b border-gray-300 border-solid`}>
+                                        <View style={tw `flex justify-center`}>
                                             <Image 
                                                 source={require(`../server/dbimages/users/${opinion.user_id}.png`)}
                                                 style={{resizeMode: "stretch", width: "30px", height: "30px", backgroundColor: "rgb(209 213 219)", padding: "1rem", borderRadius: "50%"}}
                                                 />
                                         </View>
                                         <View style={tw `text-xs flex wrap w-10/12 pt-2`}>
-                                            <View style={tw `flex flex-row justify-between`}>
+                                            <View style={tw `flex flex-row justify-between pr-2`}>
                                                 <View style={tw `flex flex-row`}>
                                                     <Text style={tw `font-semibold px-2`}>{opinion.first_name}</Text>
                                                     {

@@ -56,3 +56,10 @@ export const getOpinionsForRestaurant  = async (idRestaurant) => {
   const res = await fetch(`${API}/restaurants/opinions/${idRestaurant}`);
   return await res.json();
 }
+
+export const getUser = async (values) => {
+  const user = values.username;
+  const password = values.password;
+  const res = await fetch(`${API}/users/${user}/${password}`);
+  return await res.json();
+}

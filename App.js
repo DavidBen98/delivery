@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import ImageScreen from './screens/ImageScreen';
 import OpinionsScreen from './screens/OpinionsScreen';
+import LoginScreen from './screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,8 @@ export default function App() {
     <NavigationContainer>
       <Provider store={store}>
           <Stack.Navigator>
+            <Stack.Screen name="Login" component={LoginScreen} 
+            options={{ presentation: 'modal', headerShown:false }}/>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Restaurant" component={RestaurantScreen} />
             <Stack.Screen name="Basket" component={BasketScreen} 
