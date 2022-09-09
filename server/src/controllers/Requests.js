@@ -164,11 +164,14 @@ export const getUser = async (req, res) => {
     if (!validPassword) return res.status(400).json({ error: true, message: 'Username and/or password are incorrect' });
   
     const token = jwt.sign({
-        name: rows[0].name,
+      name: rows[0].name,
     }, process.env.TOKEN_SECRET);
 
-
-    res.header('auth-token', token).json(rows);
+    res.header('auth-token', token).json({
+      error: 'null',
+      data: rows,
+      token
+    });
 };
 
 export const register = async (req, res) => {

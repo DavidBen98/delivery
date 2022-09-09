@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc';
 import { Formik, setNestedObjectValues } from 'formik';
 import * as yup from 'yup';
@@ -21,7 +21,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 const loginValidationSchema = yup.object().shape({
   username: yup
     .string("Input your username")
-    .required("*UserName is required"),
+    .required("*Username is required"),
 
   password: yup
     .string("Input your Password")
@@ -38,7 +38,8 @@ const LoginScreen = () => {
       try {
         const userRow = await getUser(values);
        
-        if (userRow.length > 0) {
+        if (userRow.data.length > 0) {
+          await AsyncStorage.setItem('token', userRow.token);
           navigation.navigate('Home');
         } else {
           Alert.alert(
@@ -56,7 +57,16 @@ const LoginScreen = () => {
 
    return (
     <>      
-        <View style={tw `flex h-screen w-screen my-auto`}>
+          <View
+            style={tw `absolute top-0 left-0`}
+          >
+            <View 
+              style={{
+                width: 200, height: 200, backgroundColor: '#00CCBB', borderBottomRightRadius: '100% 100%'
+              }} 
+            />
+          </View>
+        <View style={tw `flex h-screen w-screen my-auto relative`}>
         
           <Text style={styles.formulario}> Login </Text>
  
@@ -91,18 +101,24 @@ const LoginScreen = () => {
                     <Text style={styles.errorText}>{errors.nombresyapellidos}</Text>
                   } */}
  
-                <TextInput style={styles.username} 
+                <TextInput 
+                  style={styles.username} 
                   placeholder="JhonDoe"
                   onChangeText={handleChange('username')}
                   onBlur={handleBlur('username')}
                   value={values.username}
-                  keyboardType="default" /> 
+                  keyboardType="default" 
+                /> 
  
                   {(errors.username && touched.username) &&
                     <Text style={styles.errorText}>{errors.username}</Text>
                   }
 
-                <TextInput style={styles.password} 
+                <TextInput style={
+                  (errors.password && touched.password) ?
+                  styles.passwordWithError
+                  : styles.password
+                } 
                   placeholder="**********"
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
@@ -118,13 +134,29 @@ const LoginScreen = () => {
                   style={styles.colorBtn}
                   onPress={handleSubmit}
                 >
-                  <Text style={styles.colorTxtBtn}>Aceptar</Text>
+                  <Text style={styles.colorTxtBtn}>Confirm</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={navigation.goBack} 
+                  style={tw `mx-auto my-4`}
+                >
+                  ¿You do not have an account? Register
                 </TouchableOpacity>
  
               </>
             )}
           </Formik>
-        </View>      
+        </View>    
+          <View
+            style={tw `absolute bottom-0 right-0 bg-yellow`}
+          >
+            <View 
+              style={{
+                width: 200, height: 200, backgroundColor: '#00CCBB', borderTopLeftRadius: '100% 100%'
+              }} 
+            />
+          </View>
     </>
   )
 };
@@ -157,6 +189,22 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     paddingRight: 12,
   }, 
+
+  passwordWithError: {
+    color: '#000',
+    fontSize: 18,
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 20, 
+    fontWeight: '600',
+    paddingLeft: 20,
+    borderWidth: 1,
+    borderRadius: 7,
+    borderColor: '#000',
+    paddingRight: 12,
+    marginBottom: 0,
+  },
  
   username: {
     color: '#000',
@@ -174,8 +222,8 @@ const styles = StyleSheet.create({
  
   colorBtn: {
     borderWidth: 1,
-    borderColor: '#007BFF',
-    backgroundColor: '#007BFF',
+    borderColor: '#00CCBB',
+    backgroundColor: '#00CCBB',
     padding: 15,
     marginLeft: 20,
     marginRight: 20,
@@ -191,7 +239,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 14,
     color: 'red',
-    marginBottom: 20,
+    margin: 10,
     marginLeft: 20
   }
  
