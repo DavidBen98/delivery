@@ -38,6 +38,6 @@ router.get("/categories/dish/dishes/:idCategory", getDishesForCategory); //obten
 
 router.get("/categories/dish/dishes/restaurant/:idRestaurant", getDishesForRestaurant); //obtener platos por restaurant
 
-router.get("/users/:user/:password", getUser);
+router.post("/users", getUser);
 
 export default router;

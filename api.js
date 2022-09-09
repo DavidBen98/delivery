@@ -60,6 +60,19 @@ export const getOpinionsForRestaurant  = async (idRestaurant) => {
 export const getUser = async (values) => {
   const user = values.username;
   const password = values.password;
-  const res = await fetch(`${API}/users/${user}/${password}`);
+  
+  const res = await fetch(`${API}/users`, {
+    method: 'POST',
+    // mode: 'no-cors',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "username": user,
+      "password": password,
+    }),
+  });
+
   return await res.json();
 }

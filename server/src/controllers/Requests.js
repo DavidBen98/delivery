@@ -150,8 +150,8 @@ export const getUser = async (req, res) => {
   const [rows] = await connection.execute(
     "SELECT * FROM user " +
     "WHERE username = ? AND password =?", [
-    req.params.user,
-    req.params.password
+    req.body.username,
+    req.body.password
   ]);
   
   res.json(rows);

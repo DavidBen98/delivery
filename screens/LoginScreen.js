@@ -8,7 +8,8 @@ import {
   StatusBar,
   TextInput, 
   Button,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 
 import tw from 'twrnc';
@@ -39,9 +40,17 @@ const LoginScreen = () => {
        
         if (userRow.length > 0) {
           navigation.navigate('Home');
+        } else {
+          Alert.alert(
+            "Error",
+            "The username and password do not match. Please try again",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+          );
         }
       } catch (error) {
-          console.log(error); 
+        console.log(error); 
       }
   }
 
