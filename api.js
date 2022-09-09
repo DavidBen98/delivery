@@ -61,9 +61,8 @@ export const getUser = async (values) => {
   const user = values.username;
   const password = values.password;
   
-  const res = await fetch(`${API}/users`, {
+  const res = await fetch(`${API}/login`, {
     method: 'POST',
-    // mode: 'no-cors',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'

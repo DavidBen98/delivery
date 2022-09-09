@@ -11,7 +11,8 @@ import {
   getRestaurantForId,
   getDishesForCategoryOfRestaurant,
   getOpinionsForRestaurant,
-  getUser
+  getUser,
+  register
 } from "../controllers/Requests.js";
 
 const router = Router();
@@ -38,6 +39,8 @@ router.get("/categories/dish/dishes/:idCategory", getDishesForCategory); //obten
 
 router.get("/categories/dish/dishes/restaurant/:idRestaurant", getDishesForRestaurant); //obtener platos por restaurant
 
-router.post("/users", getUser);
+router.post("/login", getUser);
+
+router.post("/register", register);
 
 export default router;

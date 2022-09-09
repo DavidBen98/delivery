@@ -1,6 +1,11 @@
 import { connect } from "../database.js";
+const jwt = require('jsonwebtoken');
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require('bcrypt');
+require('dotenv').config();
+import { validate } from '@hapi/joi';
+import { schemaRegister } from "./Validations.js";
 
 export const getRestaurants = async (req, res) => {
   const connection = await connect();
@@ -145,14 +150,76 @@ export const getOpinionsForRestaurant = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
-  const connection = await connect();
+    const connection = await connect();
 
-  const [rows] = await connection.execute(
-    "SELECT * FROM user " +
-    "WHERE username = ? AND password =?", [
-    req.body.username,
-    req.body.password
-  ]);
+    const [rows] = await connection.execute(
+        "SELECT * FROM user " +
+        "WHERE username = ?", [
+        req.body.username,
+    ]);
+
+    if (!rows.length) return res.status(400).json({ error: true, message: 'Username and/or password are incorrect' });
+    
+    const validPassword = await bcrypt.compare(req.body.password, rows[0].password);   
+    if (!validPassword) return res.status(400).json({ error: true, message: 'Username and/or password are incorrect' });
   
-  res.json(rows);
+    const token = jwt.sign({
+        name: rows[0].name,
+    }, process.env.TOKEN_SECRET);
+
+
+    res.header('auth-token', token).json(rows);
 };
+
+export const register = async (req, res) => {
+    const { error } = schemaRegister.validate({
+        username: req.body.user_name,
+        email: req.body.email,
+        password: req.body.password
+    });
+    
+    if (error) {
+        return res.status(400).json(
+            {error: error.details[0].message}
+        )
+    }
+
+    const connection = await connect();
+
+    const [userEmail] = await connection.execute(
+        "SELECT email " +
+        "FROM user " +
+        `WHERE email = "${req.body.email}"`
+    );
+
+    if (userEmail.length > 0) {
+        return res.status(400).json(
+            {error: 'Email ya registrado'}
+        )
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(req.body.password, salt);
+
+    const user = {
+        first_name: req.body.first_name,
+        second_name: req.body.second_name,
+        user_name: req.body.user_name,
+        email: req.body.email,
+        password: password
+    }
+
+    try {
+        const [rows] = await connection.execute(
+            "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`) " +
+            `VALUES ("${user.first_name}", "${user.second_name}","${user.user_name}","${user.password}", "${user.email}")`
+        );
+
+        res.json({
+            error: null,
+            data: rows
+        })
+    } catch (error) {
+        res.status(400).json({error})
+    }
+}
