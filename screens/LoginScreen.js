@@ -16,23 +16,22 @@ import tw from 'twrnc';
 import { Formik, setNestedObjectValues } from 'formik';
 import * as yup from 'yup';
 import { getUser } from "../api";
-import { useNavigation, useRoute } from '@react-navigation/native';
- 
-const loginValidationSchema = yup.object().shape({
-  username: yup
-    .string("Input your username")
-    .required("*Username is required"),
-
-  password: yup
-    .string("Input your Password")
-    .required("*Password is required")
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
-});
-
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
   const [user, setUser] = useState({username:'', password: ''});
   const navigation = useNavigation();
+
+  const loginValidationSchema = yup.object().shape({
+    username: yup
+      .string("Input your username")
+      .required("*Username is required"),
+  
+    password: yup
+      .string("Input your Password")
+      .required("*Password is required")
+      .oneOf([yup.ref('password'), null], 'Passwords must match')
+  });
 
   const validateUser = async (values) => {
       try {
@@ -57,17 +56,17 @@ const LoginScreen = () => {
 
    return (
     <>      
-          <View
-            style={tw `absolute top-0 left-0`}
-          >
+        <View
+          style={tw `absolute top-0 left-0`}
+        >
             <View 
               style={{
-                width: 200, height: 200, backgroundColor: '#00CCBB', borderBottomRightRadius: '100% 100%'
+                width: 200, height: 200, backgroundColor: 'rgba(0,204,187,0.5)', borderBottomRightRadius: '100% 100%'
               }} 
             />
-          </View>
-        <View style={tw `flex h-screen w-screen my-auto relative`}>
-        
+        </View>
+
+        <View style={tw `flex h-screen w-screen my-auto relative`}>  
           <Text style={styles.formulario}> Login </Text>
  
           <Formik
@@ -89,18 +88,6 @@ const LoginScreen = () => {
               isValid,
             }) => (
               <>
- 
-                {/* <TextInput style={styles.nombresyapellidos} 
-                  placeholder="Nombres y Apellidos"
-                  onChangeText={handleChange('nombresyapellidos')}
-                  onBlur={handleBlur('nombresyapellidos')}
-                  value={values.nombresyapellidos}
-                  keyboardType="default" /> 
- 
-                  {(errors.nombresyapellidos && touched.nombresyapellidos) &&
-                    <Text style={styles.errorText}>{errors.nombresyapellidos}</Text>
-                  } */}
- 
                 <TextInput 
                   style={styles.username} 
                   placeholder="JhonDoe"
@@ -114,11 +101,8 @@ const LoginScreen = () => {
                     <Text style={styles.errorText}>{errors.username}</Text>
                   }
 
-                <TextInput style={
-                  (errors.password && touched.password) ?
-                  styles.passwordWithError
-                  : styles.password
-                } 
+                <TextInput 
+                  style={styles.password} 
                   placeholder="**********"
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
@@ -138,10 +122,10 @@ const LoginScreen = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={navigation.goBack} 
+                  onPress={() => navigation.navigate('Register')} 
                   style={tw `mx-auto my-4`}
                 >
-                  ¿You do not have an account? Register
+                  <Text>¿You do not have an account? Register</Text>
                 </TouchableOpacity>
  
               </>
@@ -153,7 +137,7 @@ const LoginScreen = () => {
           >
             <View 
               style={{
-                width: 200, height: 200, backgroundColor: '#00CCBB', borderTopLeftRadius: '100% 100%'
+                width: 200, height: 200, backgroundColor: 'rgba(0,204,187,0.5)', borderTopLeftRadius: '100% 100%'
               }} 
             />
           </View>
@@ -181,7 +165,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 20, 
     fontWeight: '600',
     paddingLeft: 20,
     borderWidth: 1,
@@ -189,22 +172,6 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     paddingRight: 12,
   }, 
-
-  passwordWithError: {
-    color: '#000',
-    fontSize: 18,
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 20, 
-    fontWeight: '600',
-    paddingLeft: 20,
-    borderWidth: 1,
-    borderRadius: 7,
-    borderColor: '#000',
-    paddingRight: 12,
-    marginBottom: 0,
-  },
  
   username: {
     color: '#000',
@@ -225,6 +192,7 @@ const styles = StyleSheet.create({
     borderColor: '#00CCBB',
     backgroundColor: '#00CCBB',
     padding: 15,
+    margin: 20,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 7,
@@ -239,7 +207,6 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 14,
     color: 'red',
-    margin: 10,
     marginLeft: 20
   }
  

@@ -174,9 +174,11 @@ export const getUser = async (req, res) => {
     });
 };
 
-export const register = async (req, res) => {
+export const registerUser = async (req, res) => {
     const { error } = schemaRegister.validate({
-        username: req.body.user_name,
+        first_name: req.body.first_name,
+        second_name: req.body.second_name,
+        username: req.body.username,
         email: req.body.email,
         password: req.body.password
     });
@@ -201,13 +203,25 @@ export const register = async (req, res) => {
         )
     }
 
+    const [userUsername] = await connection.execute(
+      "SELECT username " +
+      "FROM user " +
+      `WHERE username = "${req.body.username}"`
+    );
+
+    if (userUsername.length > 0) {
+        return res.status(400).json(
+            {error: 'Username ya registrado'}
+        )
+    }
+
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(req.body.password, salt);
 
     const user = {
         first_name: req.body.first_name,
         second_name: req.body.second_name,
-        user_name: req.body.user_name,
+        username: req.body.username,
         email: req.body.email,
         password: password
     }
@@ -215,7 +229,7 @@ export const register = async (req, res) => {
     try {
         const [rows] = await connection.execute(
             "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`) " +
-            `VALUES ("${user.first_name}", "${user.second_name}","${user.user_name}","${user.password}", "${user.email}")`
+            `VALUES ("${user.first_name}", "${user.second_name}","${user.username}","${user.password}", "${user.email}")`
         );
 
         res.json({
