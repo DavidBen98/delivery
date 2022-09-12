@@ -82,19 +82,21 @@ export const newUser = async (values) => {
   const username = values.username;
   const email = values.email;
   const password = values.password;
+  const image = values.image;
 
   const res = await fetch(`${API}/register`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'content-type': 'application/json',
     },
     body: JSON.stringify({
-      "first_name": first_name,
-      "second_name": second_name,
-      "username": username,
-      "email": email,
-      "password": password,
+      first_name,
+      second_name,
+      username,
+      email,
+      password,
+      image
     }),
   });
 

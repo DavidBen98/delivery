@@ -99,6 +99,8 @@ export const getDishesForCategory = async (req, res) => {
     req.params.idCategory
   ]);
 
+  console.log(rows[0].photo);
+
   rows.map(dish => (
     fs.writeFileSync(path.join(__dirname, '../../dbimages/dishes/' + dish.id + ".png"),
     dish.photo)
@@ -134,17 +136,18 @@ export const getOpinionsForRestaurant = async (req, res) => {
   const connection = await connect();
 
   const [rows] = await connection.execute("SELECT opinions.id, opinions.description, opinions.date, opinions.user_id, opinions.stars, " +
-    "user.photo as user_photo, user.first_name as first_name " +
+    // "user.photo as user_photo, user.first_name as first_name " +
+    "user.first_name as first_name " +
     "FROM `opinions` " + 
     "INNER JOIN `user` ON user.id = opinions.user_id " +
     "WHERE restaurant_id = ?", [
     req.params.idRestaurant
   ]);
 
-  rows.map(opinion => (
-    fs.writeFileSync(path.join(__dirname, '../../dbimages/users/' + opinion.user_id + ".png"),
-    opinion.user_photo)
-  ));
+  // rows.map(opinion => (
+  //   fs.writeFileSync(path.join(__dirname, '../../dbimages/users/' + opinion.user_id + ".png"),
+  //   opinion.user_photo)
+  // ));
   
   res.json(rows);
 };
@@ -180,9 +183,10 @@ export const registerUser = async (req, res) => {
         second_name: req.body.second_name,
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        image: req.body.image
     });
-    
+
     if (error) {
         return res.status(400).json(
             {error: error.details[0].message}
@@ -223,7 +227,8 @@ export const registerUser = async (req, res) => {
         second_name: req.body.second_name,
         username: req.body.username,
         email: req.body.email,
-        password: password
+        password: password,
+        image: req.body.image
     }
 
     try {
@@ -231,6 +236,11 @@ export const registerUser = async (req, res) => {
             "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`) " +
             `VALUES ("${user.first_name}", "${user.second_name}","${user.username}","${user.password}", "${user.email}")`
         );
+
+        const base64Data = user.image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+
+        fs.writeFileSync(path.join(__dirname, '../../dbimages/users/'+user.username+'.png'),
+        base64Data, {encoding: 'base64'})
 
         res.json({
             error: null,

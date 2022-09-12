@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect} from 'react'
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,13 +9,16 @@ import {
   TextInput, 
   Button,
   TouchableOpacity,
-  Alert
+  Alert,
+  Platform,
+  Image
 } from 'react-native';
 import tw from 'twrnc';
 import { Formik, setNestedObjectValues } from 'formik';
 import * as yup from 'yup';
 import { newUser } from "../api";
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
  
 const loginValidationSchema = yup.object().shape({
     first_name: yup
@@ -38,17 +41,47 @@ const loginValidationSchema = yup.object().shape({
     .string("Input your email")
     .required("*Email is required")
     .email("Email is invalid"),
+    image: yup
+    .string("Input your image")
+    .required("*Image is required")
 });
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
+  const [image, setImage] = useState(undefined);
+  //controla que los permisos para acceder a la galería hayan sido dados
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Lo sentimos, se necesitan permisos para acceder a la galería');
+        }
+      }
+    })();
+  }, []);
+
+  //Selecciona una imágen de manera asincrina desde la galeria y cuando se carga
+  //manda a llamar a la función parentCallBack para enviarle el uri al componente padre
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  }
+
   const register = async (values) => {
       try {
         const userRow = await newUser(values);
        
-        if (userRow.data) {
-            Alert.alert(
+        if (userRow.error === null) {
+            alert(
                 "Successful registration",
                 "Go to login page",
                 [
@@ -56,7 +89,7 @@ const RegisterScreen = () => {
                 ]
               );
         } else {
-          Alert.alert(
+          alert(
             "Error",
             "An error occurred, please try again",
             [
@@ -72,11 +105,11 @@ const RegisterScreen = () => {
    return (
     <>      
           <View
-            style={tw `absolute top-0 left-0`}
+            style={tw `relative top-0 left-0`}
           >
             <View 
               style={{
-                width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.4)' , borderBottomRightRadius: '100% 100%'
+                position: "fixed", width: 100, height: 100, top: 0, left: 0, backgroundColor: 'rgba(0,204,187,0.2)', borderBottomRightRadius: '100%'
               }} 
             />
           </View>
@@ -87,7 +120,7 @@ const RegisterScreen = () => {
           <Formik
             validateOnMount={true}
             validationSchema={loginValidationSchema}
-            initialValues={{ first_name: '', second_name: '', username:'', email: '', password: '', confirm_password: ''  }}
+            initialValues={{ first_name: '', second_name: '', username:'', email: '', password: '', confirm_password: '', image: undefined  }}
             onSubmit={values => {
               register(values);
             }}
@@ -102,7 +135,6 @@ const RegisterScreen = () => {
               isValid,
             }) => (
               <>
- 
                 <TextInput 
                     style={styles.input} 
                     placeholder="First Name"
@@ -180,6 +212,34 @@ const RegisterScreen = () => {
                 {(errors.confirm_password && touched.confirm_password) &&
                     <Text style={styles.errorText}>{errors.confirm_password}</Text>
                 }
+
+                <View style={styles.button}>
+                  <Button
+                    title={image? "Change photo": "Upload photo"}
+                    onPress={pickImage}
+                  />
+
+                  <TextInput 
+                    style={{display: "none"}} 
+                    onChangeText={handleChange('image')}
+                    onBlur={handleBlur('image')}
+                    value={image}
+                    keyboardType="default" 
+                  /> 
+
+                  {image && 
+                    <View style={tw `mx-auto mt-4`}>
+                      <Image 
+                        source={{ uri: image }} 
+                        style={{ width: 100, height: 100, borderRadius: 50}} 
+                        />
+                    </View>
+                  }
+                </View>
+
+                  {(errors.image && touched.image) &&
+                    <Text style={styles.errorText}>{errors.image}</Text>
+                  }
          
                 <TouchableOpacity
                     style={styles.colorBtn}
@@ -190,22 +250,21 @@ const RegisterScreen = () => {
 
                 <TouchableOpacity
                   onPress={() =>navigation.navigate('Login')} 
-                  style={tw `mx-auto my-4`}
+                  style={tw `mx-auto my-2`}
                 >
                   <Text>¿You have an account? Login</Text>
                 </TouchableOpacity>
- 
               </>
             )}
           </Formik>
         </View>  
 
         <View
-            style={tw `absolute bottom-0 right-0 bg-yellow`}
+            style={tw `relative w-full bg-yellow`}
         >
             <View 
                 style={{
-                    width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.4)', borderTopLeftRadius: '100% 100%'
+                    position: "fixed", width: 100, height: 100, bottom: 0, right: 0, backgroundColor: 'rgba(0,204,187,0.2)', borderTopLeftRadius: '100%'
                 }} 
             />
         </View>
@@ -224,6 +283,14 @@ const styles = StyleSheet.create({
     padding: 4,
     paddingRight: 12,
     textAlign: 'center',
+  },
+
+  button: {
+    padding: 10,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 7,
   },
  
   input: {
@@ -278,6 +345,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'red',
     margin: 5,
-    marginLeft: 20
+    marginLeft: 20,
+    paddingTop: 5,
   }
 });

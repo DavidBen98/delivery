@@ -123,7 +123,7 @@ const LoginScreen = () => {
 
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Register')} 
-                  style={tw `mx-auto my-4`}
+                  style={tw `mx-auto my-2`}
                 >
                   <Text>¿You do not have an account? Register</Text>
                 </TouchableOpacity>
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   formulario: {
     color: '#000',
     fontSize: 18,
-    marginTop: 20,
+    marginTop: 5,
     fontWeight: '600',
     padding: 4,
     paddingRight: 12,
@@ -207,7 +207,8 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 14,
     color: 'red',
-    marginLeft: 20
+    marginLeft: 20,
+    paddingTop: 5,
   }
  
 });
