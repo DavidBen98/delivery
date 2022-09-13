@@ -7,6 +7,9 @@ require('dotenv').config();
 import { validate } from '@hapi/joi';
 import { schemaRegister } from "./Validations.js";
 
+const multer = require('multer');
+const upload = multer({ dest: 'images/' });
+
 export const getRestaurants = async (req, res) => {
   const connection = await connect();
 
@@ -184,7 +187,6 @@ export const registerUser = async (req, res) => {
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        image: req.body.image
     });
 
     if (error) {
@@ -236,11 +238,12 @@ export const registerUser = async (req, res) => {
             "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`) " +
             `VALUES ("${user.first_name}", "${user.second_name}","${user.username}","${user.password}", "${user.email}")`
         );
-
-        const base64Data = user.image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-
+        
+        const base64Data = req.body.image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+        
         fs.writeFileSync(path.join(__dirname, '../../dbimages/users/'+user.username+'.png'),
-        base64Data, {encoding: 'base64'})
+        base64Data, {encoding: 'base64'});
+
 
         res.json({
             error: null,

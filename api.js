@@ -1,5 +1,6 @@
 const API = "http://localhost:3000";
 
+
 export const getRestaurants = async () => {
   const res = await fetch(API+"/restaurants");
   return await res.json();
@@ -77,28 +78,38 @@ export const getUser = async (values) => {
 }
 
 export const newUser = async (values) => {
-  const first_name = values.first_name;
-  const second_name = values.second_name;
-  const username = values.username;
-  const email = values.email;
-  const password = values.password;
-  const image = values.image;
+  var form = new URLSearchParams();
+  form.append('first_name', values.first_name);
+  form.append("second_name", values.second_name);
+  form.append("username", values.username);
+  form.append("email", values.email);
+  form.append("password", values.password);
+  
+  const fileToBase64 = async() => {
+    return new Promise(resolve => {
+      var reader = new FileReader();
+      // Read file content on file loaded event
+      reader.onload = function(event) {
+        resolve(event.target.result);
+      };
+      
+      // Convert data to base64 
+      reader.readAsDataURL(values.image);
+    });
+  }; 
 
-  const res = await fetch(`${API}/register`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      first_name,
-      second_name,
-      username,
-      email,
-      password,
-      image
-    }),
-  });
+  const res = await fileToBase64()
+    .then(result => {
+      form.append("image", result);
+      return;
+    })
+    .then (() => {
+      return fetch(`${API}/register`, {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        method: 'POST',
+        body: form,
+      });
+  })
 
   return await res.json();
 }

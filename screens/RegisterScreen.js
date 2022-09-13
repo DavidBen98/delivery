@@ -14,7 +14,7 @@ import {
   Image
 } from 'react-native';
 import tw from 'twrnc';
-import { Formik, setNestedObjectValues } from 'formik';
+import { Formik, setNestedObjectValues, Field } from 'formik';
 import * as yup from 'yup';
 import { newUser } from "../api";
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -42,14 +42,13 @@ const loginValidationSchema = yup.object().shape({
     .required("*Email is required")
     .email("Email is invalid"),
     image: yup
-    .string("Input your image")
-    .required("*Image is required")
+      .mixed()
+      .required("*Image is a required file"),
 });
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
-  const [image, setImage] = useState(undefined);
   //controla que los permisos para acceder a la galería hayan sido dados
   useEffect(() => {
     (async () => {
@@ -62,26 +61,12 @@ const RegisterScreen = () => {
     })();
   }, []);
 
-  //Selecciona una imágen de manera asincrina desde la galeria y cuando se carga
-  //manda a llamar a la función parentCallBack para enviarle el uri al componente padre
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: false,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  }
-
   const register = async (values) => {
       try {
         const userRow = await newUser(values);
-       
+
         if (userRow.error === null) {
-            alert(
+            Alert.alert(
                 "Successful registration",
                 "Go to login page",
                 [
@@ -89,7 +74,7 @@ const RegisterScreen = () => {
                 ]
               );
         } else {
-          alert(
+          Alert.alert(
             "Error",
             "An error occurred, please try again",
             [
@@ -120,7 +105,7 @@ const RegisterScreen = () => {
           <Formik
             validateOnMount={true}
             validationSchema={loginValidationSchema}
-            initialValues={{ first_name: '', second_name: '', username:'', email: '', password: '', confirm_password: '', image: undefined  }}
+            initialValues={{ first_name: 'diego', second_name: 'maradona', username:'asdfghj', email: '1@a.com', password: '123456', confirm_password: '123456', image: null}}
             onSubmit={values => {
               register(values);
             }}
@@ -133,6 +118,7 @@ const RegisterScreen = () => {
               errors,
               touched,
               isValid,
+              setFieldValue
             }) => (
               <>
                 <TextInput 
@@ -214,27 +200,13 @@ const RegisterScreen = () => {
                 }
 
                 <View style={styles.button}>
-                  <Button
-                    title={image? "Change photo": "Upload photo"}
-                    onPress={pickImage}
+                  <input
+                    type="file"
+                    name="image"
+                    onChange={(e) => {
+                      setFieldValue("image", e.target.files[0]);
+                    }}
                   />
-
-                  <TextInput 
-                    style={{display: "none"}} 
-                    onChangeText={handleChange('image')}
-                    onBlur={handleBlur('image')}
-                    value={image}
-                    keyboardType="default" 
-                  /> 
-
-                  {image && 
-                    <View style={tw `mx-auto mt-4`}>
-                      <Image 
-                        source={{ uri: image }} 
-                        style={{ width: 100, height: 100, borderRadius: 50}} 
-                        />
-                    </View>
-                  }
                 </View>
 
                   {(errors.image && touched.image) &&
@@ -288,8 +260,8 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 'auto',
+    marginRight: 'auto',
     borderRadius: 7,
   },
  
