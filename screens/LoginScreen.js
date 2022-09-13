@@ -1,19 +1,8 @@
 import React, { useState} from 'react'
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput, 
-  Button,
-  TouchableOpacity,
-  Alert
-} from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc';
-import { Formik, setNestedObjectValues } from 'formik';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import { getUser } from "../api";
 import { useNavigation } from '@react-navigation/native';
@@ -209,6 +198,5 @@ const styles = StyleSheet.create({
     color: 'red',
     marginLeft: 20,
     paddingTop: 5,
-  }
- 
+  } 
 });

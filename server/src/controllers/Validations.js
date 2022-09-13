@@ -1,4 +1,3 @@
-
 const Joi = require('@hapi/joi');
 
 export const schemaRegister = Joi.object({

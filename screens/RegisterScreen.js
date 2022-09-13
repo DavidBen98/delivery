@@ -1,52 +1,39 @@
-import React, { useState, useEffect} from 'react'
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput, 
-  Button,
-  TouchableOpacity,
-  Alert,
-  Platform,
-  Image
-} from 'react-native';
+import React, { useEffect} from 'react'
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Platform } from 'react-native';
 import tw from 'twrnc';
-import { Formik, setNestedObjectValues, Field } from 'formik';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import { newUser } from "../api";
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
- 
-const loginValidationSchema = yup.object().shape({
-    first_name: yup
-        .string("Input your username")
-        .required("*First name is required"),
-    second_name: yup
-        .string("Input your username")
-        .required("*Second name is required"),
-    username: yup
-        .string("Input your username")
-        .required("*Username is required"),
-    password: yup
-        .string("Input your Password")
-        .required("*Password is required"),
-    confirm_password: yup
-        .string("Input your Password")
-        .required("*Password is required")
-        .oneOf([yup.ref('password'), null], 'Passwords must match'),
-    email: yup
-    .string("Input your email")
-    .required("*Email is required")
-    .email("Email is invalid"),
-    image: yup
-      .mixed()
-      .required("*Image is a required file"),
-});
 
 const RegisterScreen = () => {
+  const loginValidationSchema = yup.object().shape({
+      first_name: yup
+          .string("Input your username")
+          .required("*First name is required"),
+      second_name: yup
+          .string("Input your username")
+          .required("*Second name is required"),
+      username: yup
+          .string("Input your username")
+          .required("*Username is required"),
+      password: yup
+          .string("Input your Password")
+          .required("*Password is required"),
+      confirm_password: yup
+          .string("Input your Password")
+          .required("*Password is required")
+          .oneOf([yup.ref('password'), null], 'Passwords must match'),
+      email: yup
+      .string("Input your email")
+      .required("*Email is required")
+      .email("Email is invalid"),
+      image: yup
+        .mixed()
+        .required("*Image is a required file"),
+  });
+
   const navigation = useNavigation();
 
   //controla que los permisos para acceder a la galería hayan sido dados
@@ -66,13 +53,13 @@ const RegisterScreen = () => {
         const userRow = await newUser(values);
 
         if (userRow.error === null) {
-            Alert.alert(
-                "Successful registration",
-                "Go to login page",
-                [
-                  { text: "OK", onPress: () =>  navigation.navigate('Login')}
-                ]
-              );
+          Alert.alert(
+            "Successful registration",
+            "Go to login page",
+            [
+              { text: "OK", onPress: () =>  navigation.navigate('Login')}
+            ]
+          );
         } else {
           Alert.alert(
             "Error",
@@ -89,15 +76,16 @@ const RegisterScreen = () => {
 
    return (
     <>      
-          <View
-            style={tw `relative top-0 left-0`}
-          >
-            <View 
-              style={{
-                position: "fixed", width: 100, height: 100, top: 0, left: 0, backgroundColor: 'rgba(0,204,187,0.2)', borderBottomRightRadius: '100%'
-              }} 
-            />
-          </View>
+        <View
+          style={tw `relative top-0 left-0`}
+        >
+          <View 
+            style={{
+              position: "fixed", width: 100, height: 100, top: 0, left: 0, backgroundColor: 'rgba(0,204,187,0.2)', borderBottomRightRadius: '100%'
+            }} 
+          />
+        </View>
+
         <View style={tw `flex h-screen w-screen my-auto relative`}>
         
           <Text style={styles.formulario}> Register </Text>
@@ -105,7 +93,7 @@ const RegisterScreen = () => {
           <Formik
             validateOnMount={true}
             validationSchema={loginValidationSchema}
-            initialValues={{ first_name: 'diego', second_name: 'maradona', username:'asdfghj', email: '1@a.com', password: '123456', confirm_password: '123456', image: null}}
+            initialValues={{ first_name: '', second_name: '', username:'', email: '', password: '', confirm_password: '', image: null}}
             onSubmit={values => {
               register(values);
             }}
@@ -122,17 +110,17 @@ const RegisterScreen = () => {
             }) => (
               <>
                 <TextInput 
-                    style={styles.input} 
-                    placeholder="First Name"
-                    onChangeText={handleChange('first_name')}
-                    onBlur={handleBlur('first_name')}
-                    value={values.first_name}
-                    keyboardType="default" 
+                  style={styles.input} 
+                  placeholder="First Name"
+                  onChangeText={handleChange('first_name')}
+                  onBlur={handleBlur('first_name')}
+                  value={values.first_name}
+                  keyboardType="default" 
                 /> 
  
-                  {(errors.first_name && touched.first_name) &&
-                    <Text style={styles.errorText}>{errors.first_name}</Text>
-                  }
+                {(errors.first_name && touched.first_name) &&
+                  <Text style={styles.errorText}>{errors.first_name}</Text>
+                }
 
                 <TextInput 
                     style={styles.input} 
@@ -143,9 +131,9 @@ const RegisterScreen = () => {
                     keyboardType="default" 
                 /> 
  
-                  {(errors.second_name && touched.second_name) &&
-                    <Text style={styles.errorText}>{errors.second_name}</Text>
-                  }
+                {(errors.second_name && touched.second_name) &&
+                  <Text style={styles.errorText}>{errors.second_name}</Text>
+                }
  
                 <TextInput 
                     style={styles.input} 

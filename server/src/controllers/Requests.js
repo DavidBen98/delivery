@@ -4,11 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const bcrypt = require('bcrypt');
 require('dotenv').config();
-import { validate } from '@hapi/joi';
 import { schemaRegister } from "./Validations.js";
-
-const multer = require('multer');
-const upload = multer({ dest: 'images/' });
 
 export const getRestaurants = async (req, res) => {
   const connection = await connect();
