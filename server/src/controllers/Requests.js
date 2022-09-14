@@ -162,11 +162,16 @@ export const getUser = async (req, res) => {
 
     if (!rows.length) return res.status(400).json({ error: true, message: 'Username and/or password are incorrect' });
     
-    const validPassword = await bcrypt.compare(req.body.password, rows[0].password);   
+    const validPassword = await bcrypt.compare(req.body.password, rows[0].password); 
+
     if (!validPassword) return res.status(400).json({ error: true, message: 'Username and/or password are incorrect' });
   
     const token = jwt.sign({
-      name: rows[0].name,
+      id: rows[0].id,
+      first_name: rows[0].first_name,
+      second_name: rows[0].second_name,
+      username: rows[0].username,
+      email: rows[0].email,
     }, process.env.TOKEN_SECRET);
 
     res.header('auth-token', token).json({

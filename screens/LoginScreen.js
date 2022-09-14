@@ -1,15 +1,25 @@
 import React, { useState} from 'react'
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { getUser } from "../api";
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, selectLogin } from '../features/loginSlice';
+import HomeScreen from './HomeScreen';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [user, setUser] = useState({username:'', password: ''});
-  const navigation = useNavigation();
+
+  // const login = useSelector(login);
+  const {isLoading, userToken} = useSelector(selectLogin);
+
+  // const logout = useSelector(loginSlice.logout);
+  // const isLoading = useSelector(loginSlice.isLoading);
+  // const userToken = useSelector(loginSlice.userToken);
+  // const navigation = useNavigation();
 
   const loginValidationSchema = yup.object().shape({
     username: yup
@@ -43,14 +53,17 @@ const LoginScreen = () => {
       }
   }
 
+  {isLoading && <Text>Esta cargando</Text> }
+
    return (
     <>      
+        {/* {userToken !== null? <HomeScreen /> : <AuthStack /> } */}
         <View
           style={tw `absolute top-0 left-0`}
         >
             <View 
               style={{
-                width: 200, height: 200, backgroundColor: 'rgba(0,204,187,0.5)', borderBottomRightRadius: '100% 100%'
+                width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.5)', borderBottomRightRadius: '100% 100%'
               }} 
             />
         </View>
@@ -110,26 +123,92 @@ const LoginScreen = () => {
                   <Text style={styles.colorTxtBtn}>Confirm</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Register')} 
-                  style={tw `mx-auto my-2`}
-                >
-                  <Text>¿You do not have an account? Register</Text>
-                </TouchableOpacity>
  
               </>
             )}
           </Formik>
-        </View>    
+
+
           <View
-            style={tw `absolute bottom-0 right-0 bg-yellow`}
-          >
-            <View 
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              marginTop: 20,
+              marginBottom: 30,
+              marginLeft: 20,
+              marginRight: 20,
+            }}>
+
+            <Text style={{textAlign: 'center', color: '#666', marginBottom: 20, width: '100%'}}>
+              Or, login with ...
+            </Text>
+            <TouchableOpacity
+              onPress={() => {}}
               style={{
-                width: 200, height: 200, backgroundColor: 'rgba(0,204,187,0.5)', borderTopLeftRadius: '100% 100%'
-              }} 
-            />
+                borderColor: '#ddd',
+                borderWidth: 2,
+                borderRadius: 10,
+                paddingHorizontal: 30,
+                paddingVertical: 10,
+              }}>
+
+                <Image
+                  source={require(`../assets/images/misc/google.svg`)}
+                  style={tw `h-5 w-5 rounded-sm object-fill`}
+                />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                borderColor: '#ddd',
+                borderWidth: 2,
+                borderRadius: 10,
+                paddingHorizontal: 30,
+                paddingVertical: 10,
+              }}>
+                <Image
+                  source={require(`../assets/images/misc/facebook.svg`)}
+                  style={tw `h-5 w-5 rounded-sm object-fill`}
+                />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                borderColor: '#ddd',
+                borderWidth: 2,
+                borderRadius: 10,
+                paddingHorizontal: 30,
+                paddingVertical: 10,
+              }}>
+              <Image
+                  source={require(`../assets/images/misc/twitter.svg`)}
+                  style={tw `h-5 w-5 rounded-sm object-fill`}
+                />
+            </TouchableOpacity>
           </View>
+
+
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Register')} 
+            style={tw `mx-auto my-2`}
+          >
+            <Text>¿You do not have an account? Register</Text>
+          </TouchableOpacity>
+
+        </View> 
+
+
+        <View
+          style={tw `absolute bottom-0 right-0 bg-yellow`}
+        >
+          <View 
+            style={{
+              width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.5)', borderTopLeftRadius: '100% 100%'
+            }} 
+          />
+        </View>
     </>
   )
 };
