@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { getUser } from "../api";
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout, selectUser } from '../features/userSlice';
+import { login, selectUser } from '../features/userSlice';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -18,7 +18,6 @@ const LoginScreen = () => {
   const { userToken } = useSelector(selectUser);
   
   useEffect(() => {
-
     const getToken = async() => {
       const token = await AsyncStorage.getItem('token');
 
@@ -52,7 +51,7 @@ const LoginScreen = () => {
 
           dispatch(
             login({
-              userToken: '123',
+              userToken: userRow.token,
             })
           );
 
@@ -84,11 +83,19 @@ const LoginScreen = () => {
         <View
           style={tw `absolute top-0 left-0`}
         >
+          {user.username.length > 0 && user.password.length > 5? (
             <View 
               style={{
                 width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.5)', borderBottomRightRadius: '100% 100%'
               }} 
             />
+          ) : (
+            <View 
+              style={{ 
+                width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.1)', borderBottomRightRadius: '100% 100%'
+              }} 
+            />
+          ) }
         </View>
 
         <View style={tw `flex h-screen w-screen my-auto relative`}>  
@@ -112,10 +119,14 @@ const LoginScreen = () => {
               isValid,
             }) => (
               <>
+              {console.log(values)}
                 <TextInput 
                   style={styles.username} 
                   placeholder="JhonDoe"
-                  onChangeText={handleChange('username')}
+                  onChangeText={handleChange('username')
+                    // setUser({...user, username: values.username})
+                  }
+                  onChange={(e) => setUser({...user, username: e.target.value})}
                   onBlur={handleBlur('username')}
                   value={values.username}
                   keyboardType="default" 
@@ -128,7 +139,11 @@ const LoginScreen = () => {
                 <TextInput 
                   style={styles.password} 
                   placeholder="**********"
-                  onChangeText={handleChange('password')}
+                  onChangeText={
+                    handleChange('password')
+                    // setUser({...user, password: values.password})
+                  }
+                  onChange={(e) => setUser({...user, password: e.target.value})}
                   onBlur={handleBlur('password')}
                   value={values.password}
                   keyboardType="visible-password" 
@@ -138,12 +153,24 @@ const LoginScreen = () => {
                   <Text style={styles.errorText}>{errors.password}</Text>
                 }
          
-                <TouchableOpacity
-                  style={styles.colorBtn}
-                  onPress={handleSubmit}
-                >
-                  <Text style={styles.colorTxtBtn}>Confirm</Text>
-                </TouchableOpacity>
+                {user.username.length > 0 && user.password.length > 5? 
+                  (
+                    <TouchableOpacity
+                      style={styles.colorBtn}
+                      onPress={handleSubmit}
+                    >
+                      <Text style={styles.colorTxtBtn}>Confirm</Text> 
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.colorBtnDisabled}
+                      onPress={handleSubmit}
+                      disabled
+                    >
+                      <Text style={styles.colorTxtBtn}>Confirm</Text> 
+                    </TouchableOpacity>
+                  )
+                }
  
               </>
             )}
@@ -227,11 +254,19 @@ const LoginScreen = () => {
         <View
           style={tw `absolute bottom-0 right-0 bg-yellow`}
         >
-          <View 
-            style={{
-              width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.5)', borderTopLeftRadius: '100% 100%'
-            }} 
-          />
+          {user.username.length > 0 && user.password.length > 5? (
+            <View 
+              style={{
+                width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.5)', borderTopLeftRadius: '100% 100%'
+              }} 
+            />
+          ) : (
+            <View 
+              style={{ 
+                width: 100, height: 100, backgroundColor: 'rgba(0,204,187,0.1)', borderTopLeftRadius: '100% 100%'
+              }} 
+            />
+          ) }
         </View>
     </>
   )
@@ -283,6 +318,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#00CCBB',
     backgroundColor: '#00CCBB',
+    padding: 15,
+    margin: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    borderRadius: 7,
+  },
+
+  colorBtnDisabled: {
+    borderWidth: 1,
+    borderColor: 'rgba(0,204,187,0.3)',
+    backgroundColor: 'rgba(0,204,187,0.3)',
     padding: 15,
     margin: 20,
     marginLeft: 20,
