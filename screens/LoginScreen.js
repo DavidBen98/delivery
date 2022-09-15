@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc';
@@ -7,19 +7,31 @@ import * as yup from 'yup';
 import { getUser } from "../api";
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, selectLogin } from '../features/loginSlice';
-import HomeScreen from './HomeScreen';
+import { login, logout, selectUser } from '../features/userSlice';
 
-const LoginScreen = ({navigation}) => {
-  const [user, setUser] = useState({username:'', password: ''});
+const LoginScreen = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const initialState = {username:'', password: ''};
+  const [user, setUser] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
+  const { userToken } = useSelector(selectUser);
+  
+  useEffect(() => {
 
-  // const login = useSelector(login);
-  const {isLoading, userToken} = useSelector(selectLogin);
+    const getToken = async() => {
+      const token = await AsyncStorage.getItem('token');
 
-  // const logout = useSelector(loginSlice.logout);
-  // const isLoading = useSelector(loginSlice.isLoading);
-  // const userToken = useSelector(loginSlice.userToken);
-  // const navigation = useNavigation();
+      dispatch(login({
+        userToken: token
+      }));
+
+      if(token !== null) navigation.navigate('Home')
+    }
+    
+    getToken();
+  }, []);
+
 
   const loginValidationSchema = yup.object().shape({
     username: yup
@@ -29,7 +41,6 @@ const LoginScreen = ({navigation}) => {
     password: yup
       .string("Input your Password")
       .required("*Password is required")
-      .oneOf([yup.ref('password'), null], 'Passwords must match')
   });
 
   const validateUser = async (values) => {
@@ -38,7 +49,16 @@ const LoginScreen = ({navigation}) => {
        
         if (userRow.data.length > 0) {
           await AsyncStorage.setItem('token', userRow.token);
+
+          dispatch(
+            login({
+              userToken: '123',
+            })
+          );
+
+          setUser(initialState);
           navigation.navigate('Home');
+
         } else {
           Alert.alert(
             "Error",
@@ -53,11 +73,14 @@ const LoginScreen = ({navigation}) => {
       }
   }
 
-  {isLoading && <Text>Esta cargando</Text> }
+  const handleSubmit = (values) => {
+    setUser(values);
+    validateUser(values);
+  }
 
+  {isLoading && <Text>Esta cargando</Text> }
    return (
     <>      
-        {/* {userToken !== null? <HomeScreen /> : <AuthStack /> } */}
         <View
           style={tw `absolute top-0 left-0`}
         >
@@ -75,9 +98,8 @@ const LoginScreen = ({navigation}) => {
             validateOnMount={true}
             validationSchema={loginValidationSchema}
             initialValues={{ username:'', password: '' }}
-            onSubmit={values => {
-              setUser(values);
-              validateUser(values);
+            onSubmit={(values) => {
+              handleSubmit(values)
             }}
           >
             {({
@@ -122,12 +144,10 @@ const LoginScreen = ({navigation}) => {
                 >
                   <Text style={styles.colorTxtBtn}>Confirm</Text>
                 </TouchableOpacity>
-
  
               </>
             )}
           </Formik>
-
 
           <View
             style={{
@@ -153,11 +173,13 @@ const LoginScreen = ({navigation}) => {
                 paddingVertical: 10,
               }}>
 
-                <Image
-                  source={require(`../assets/images/misc/google.svg`)}
-                  style={tw `h-5 w-5 rounded-sm object-fill`}
-                />
+              <Image
+                source={require(`../assets/images/misc/google.svg`)}
+                style={tw `h-5 w-5 rounded-sm object-fill`}
+              />
+
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => {}}
               style={{
@@ -167,11 +189,14 @@ const LoginScreen = ({navigation}) => {
                 paddingHorizontal: 30,
                 paddingVertical: 10,
               }}>
+
                 <Image
                   source={require(`../assets/images/misc/facebook.svg`)}
                   style={tw `h-5 w-5 rounded-sm object-fill`}
                 />
+
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => {}}
               style={{
@@ -181,14 +206,14 @@ const LoginScreen = ({navigation}) => {
                 paddingHorizontal: 30,
                 paddingVertical: 10,
               }}>
+
               <Image
                   source={require(`../assets/images/misc/twitter.svg`)}
                   style={tw `h-5 w-5 rounded-sm object-fill`}
                 />
+
             </TouchableOpacity>
           </View>
-
-
 
           <TouchableOpacity
             onPress={() => navigation.navigate('Register')} 
@@ -198,7 +223,6 @@ const LoginScreen = ({navigation}) => {
           </TouchableOpacity>
 
         </View> 
-
 
         <View
           style={tw `absolute bottom-0 right-0 bg-yellow`}

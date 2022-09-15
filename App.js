@@ -13,7 +13,6 @@ import OpinionsScreen from './screens/OpinionsScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LocationsScreen from './screens/LocationsScreen';
-import AuthStack from './navigation/AuthStack';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,10 +20,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Provider store={store}>
-        <AuthStack>
           <Stack.Navigator>
-            {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
-            {/* <Stack.Screen name="Register" component={RegisterScreen} /> */}
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="Locations" component={LocationsScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Restaurant" component={RestaurantScreen} />
@@ -42,7 +40,6 @@ export default function App() {
             <Stack.Screen name="Opinions" component={OpinionsScreen} 
             options={{ presentation: 'modal', headerShown:false }}/>
           </Stack.Navigator>
-        </AuthStack>
       </Provider>
     </NavigationContainer>
   );
