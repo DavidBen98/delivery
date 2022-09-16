@@ -1,22 +1,38 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc';
+
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { getUser } from "../api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { useNavigation } from '@react-navigation/native';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectUser } from '../features/userSlice';
+
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+
+import { CREDENTIALS_GOOGLE_WEB, CREDENTIALS_GOOGLE_IOS } from '@env'
+
+WebBrowser.maybeCompleteAuthSession();
 
 const LoginScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const initialState = {username:'', password: ''};
   const [user, setUser] = useState(initialState);
+  const [aux, setAux] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
   const { userToken } = useSelector(selectUser);
-  
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    clientId: `${CREDENTIALS_GOOGLE_WEB}`,
+    iosClientId: `${CREDENTIALS_GOOGLE_IOS}`
+  });
+
   useEffect(() => {
     const getToken = async() => {
       const token = await AsyncStorage.getItem('token');
@@ -31,6 +47,25 @@ const LoginScreen = () => {
     getToken();
   }, []);
 
+  useEffect(() => {
+    if (response?.type === 'success') {
+      dispatch(login({
+        userToken: response.authentication.accessToken
+      }));
+
+      userToken !== null && fetchUserInfo();
+    }
+  }, [response, userToken]);
+
+  async function fetchUserInfo() {
+    let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+      headers: { Authorization: `Bearer ${userToken}` }
+    });
+    const useInfo = await response.json();
+    setAux(useInfo);
+
+    console.log(useInfo);
+  }
 
   const loginValidationSchema = yup.object().shape({
     username: yup
@@ -119,7 +154,6 @@ const LoginScreen = () => {
               isValid,
             }) => (
               <>
-              {console.log(values)}
                 <TextInput 
                   style={styles.username} 
                   placeholder="JhonDoe"
@@ -191,14 +225,15 @@ const LoginScreen = () => {
               Or, login with ...
             </Text>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {promptAsync()}}
               style={{
                 borderColor: '#ddd',
                 borderWidth: 2,
                 borderRadius: 10,
                 paddingHorizontal: 30,
                 paddingVertical: 10,
-              }}>
+              }}
+            >
 
               <Image
                 source={require(`../assets/images/misc/google.svg`)}
@@ -215,12 +250,13 @@ const LoginScreen = () => {
                 borderRadius: 10,
                 paddingHorizontal: 30,
                 paddingVertical: 10,
-              }}>
+              }}
+            >
 
-                <Image
-                  source={require(`../assets/images/misc/facebook.svg`)}
-                  style={tw `h-5 w-5 rounded-sm object-fill`}
-                />
+              <Image
+                source={require(`../assets/images/misc/facebook.svg`)}
+                style={tw `h-5 w-5 rounded-sm object-fill`}
+              />
 
             </TouchableOpacity>
 
@@ -232,12 +268,13 @@ const LoginScreen = () => {
                 borderRadius: 10,
                 paddingHorizontal: 30,
                 paddingVertical: 10,
-              }}>
+              }}
+            >
 
               <Image
-                  source={require(`../assets/images/misc/twitter.svg`)}
-                  style={tw `h-5 w-5 rounded-sm object-fill`}
-                />
+                source={require(`../assets/images/misc/twitter.svg`)}
+                style={tw `h-5 w-5 rounded-sm object-fill`}
+              />
 
             </TouchableOpacity>
           </View>
