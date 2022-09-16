@@ -181,6 +181,20 @@ export const getUser = async (req, res) => {
     });
 };
 
+export const existUser = async(req, res) => {
+  const connection = await connect();
+
+  const [rows] = await connection.execute(
+      "SELECT email FROM user " +
+      "WHERE email = ?", [
+      req.body.email,
+  ]);
+
+  return res.json({
+    data: rows,
+  })
+}
+
 export const registerUser = async (req, res) => {
     const { error } = schemaRegister.validate({
         first_name: req.body.first_name,
@@ -253,4 +267,31 @@ export const registerUser = async (req, res) => {
     } catch (error) {
         res.status(400).json({error})
     }
+}
+
+export const registerUserWithGoogle = async (req, res) => {
+  const connection = await connect();
+
+  const user = {
+    first_name: req.body.first_name,
+    second_name: req.body.second_name,
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+    image: req.body.image
+  }
+
+  try {
+      const [rows] = await connection.execute(
+          "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`, `image`) " +
+          `VALUES ("${user.first_name}", "${user.second_name}","${user.username}","${user.password}", "${user.email}", , "${user.image}")`
+      );
+
+      res.json({
+          error: null,
+          data: rows
+      })
+  } catch (error) {
+      res.status(400).json({error})
+  }
 }

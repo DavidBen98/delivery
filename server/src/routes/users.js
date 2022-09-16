@@ -12,7 +12,9 @@ import {
   getDishesForCategoryOfRestaurant,
   getOpinionsForRestaurant,
   getUser,
-  registerUser
+  registerUser,
+  existUser,
+  registerUserWithGoogle
 } from "../controllers/Requests.js";
 
 const router = Router();
@@ -41,6 +43,11 @@ router.get("/categories/dish/dishes/restaurant/:idRestaurant", getDishesForResta
 
 router.post("/login", getUser);
 
+router.post("/user", existUser);
+
 router.post("/register", registerUser);
+
+router.post("/registerWithGoogle", registerUserWithGoogle);
+
 
 export default router;

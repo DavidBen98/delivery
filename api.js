@@ -1,6 +1,5 @@
 const API = "http://localhost:3000";
 
-
 export const getRestaurants = async () => {
   const res = await fetch(API+"/restaurants");
   return await res.json();
@@ -83,7 +82,6 @@ export const newUser = async (values) => {
   form.append("second_name", values.second_name);
   form.append("username", values.username);
   form.append("email", values.email);
-  form.append("password", values.password);
   
   const fileToBase64 = async() => {
     return new Promise(resolve => {
@@ -98,18 +96,45 @@ export const newUser = async (values) => {
     });
   }; 
 
-  const res = await fileToBase64()
-    .then(result => {
-      form.append("image", result);
-      return;
-    })
-    .then (() => {
-      return fetch(`${API}/register`, {
+  const exist = await fetch(`${API}/user`, {
+    headers: {'Content-Type': 'application/json'},
+    method: 'POST',
+    body: JSON.stringify({
+      email: values.email,
+    }),
+  }).then((data) => data.json()).then((data) => data);
+
+  if (!exist.length && values.social === 'Google') {
+      form.append("password", null);
+      form.append("image", values.image);
+
+      console.log("aca");
+
+      const res = await fetch(`${API}/registerWithGoogle`, {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         method: 'POST',
         body: form,
-      });
-  })
+      }); 
+      
+      return await res.json();
+
+      
+  } else if (!exist) {
+    form.append("password", values.password);
+
+    const res = await fileToBase64()
+    .then(result => {
+        form.append("image", result);
+        return;
+      })
+      .then (() => {
+        return fetch(`${API}/register`, {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          method: 'POST',
+          body: form,
+        });
+    })
+  }
 
   return await res.json();
 }

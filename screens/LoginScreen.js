@@ -14,8 +14,9 @@ import { login, selectUser } from '../features/userSlice';
 
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import { CREDENTIALS_GOOGLE_WEB, CREDENTIALS_GOOGLE_IOS } from '@env';
 
-import { CREDENTIALS_GOOGLE_WEB, CREDENTIALS_GOOGLE_IOS } from '@env'
+import { newUser } from "../api";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -61,10 +62,14 @@ const LoginScreen = () => {
     let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
       headers: { Authorization: `Bearer ${userToken}` }
     });
-    const useInfo = await response.json();
-    setAux(useInfo);
+    const {given_name,family_name, email, picture } = await response.json();
 
-    console.log(useInfo);
+    const user = { first_name: given_name, second_name: family_name, username: email, email: email, password: null, image: picture, social: 'Google'}
+
+    const userRow = await newUser(user);
+
+    navigation.navigate('Home');
+
   }
 
   const loginValidationSchema = yup.object().shape({
