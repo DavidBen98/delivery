@@ -108,8 +108,6 @@ export const newUser = async (values) => {
       form.append("password", null);
       form.append("image", values.image);
 
-      console.log("aca");
-
       const res = await fetch(`${API}/registerWithGoogle`, {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         method: 'POST',
@@ -117,7 +115,6 @@ export const newUser = async (values) => {
       }); 
       
       return await res.json();
-
       
   } else if (!exist) {
     form.append("password", values.password);

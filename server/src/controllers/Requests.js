@@ -98,11 +98,8 @@ export const getDishesForCategory = async (req, res) => {
     req.params.idCategory
   ]);
 
-  console.log(rows[0].photo);
-
   rows.map(dish => (
-    fs.writeFileSync(path.join(__dirname, '../../dbimages/dishes/' + dish.id + ".png"),
-    dish.photo)
+    fs.writeFileSync(path.join(__dirname, '../../dbimages/dishes/' + dish.id + ".png"), dish.photo)
   ));
   
   res.json(rows);
@@ -282,16 +279,16 @@ export const registerUserWithGoogle = async (req, res) => {
   }
 
   try {
-      const [rows] = await connection.execute(
-          "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`, `image`) " +
-          `VALUES ("${user.first_name}", "${user.second_name}","${user.username}","${user.password}", "${user.email}", , "${user.image}")`
-      );
+    const [rows] = await connection.execute(
+        "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`, `image`) " +
+        `VALUES ("${user.first_name}", "${user.second_name}","${user.username}","${user.password}", "${user.email}", "${user.image}")`
+    );
 
-      res.json({
-          error: null,
-          data: rows
-      })
+    res.json({
+        error: null,
+        data: rows
+    })
   } catch (error) {
-      res.status(400).json({error})
+    res.status(400).json({error})
   }
 }
