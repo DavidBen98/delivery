@@ -1,4 +1,5 @@
 const API = "http://localhost:3000";
+import { TOKEN_SECRET } from '@env';
 
 export const getRestaurants = async () => {
   const res = await fetch(API+"/restaurants");
@@ -76,6 +77,14 @@ export const getUser = async (values) => {
   return await res.json();
 }
 
+export const getDataUser = async (token) => {  
+  const jwt = require('jsonwebtoken');
+  
+  const res = jwt.verify(token, TOKEN_SECRET);
+
+  return res;
+}
+
 export const newUser = async (values) => {
   var form = new URLSearchParams();
   form.append('first_name', values.first_name);
@@ -104,6 +113,7 @@ export const newUser = async (values) => {
     }),
   }).then((data) => data.json()).then((data) => data);
 
+  //Inicio de sesión desde Google
   if (!exist.length && values.social === 'Google') {
       form.append("password", null);
       form.append("image", values.image);
@@ -115,8 +125,8 @@ export const newUser = async (values) => {
       }); 
       
       return await res.json();
-      
-  } else if (!exist) {
+  //Registración  
+  } else if (!exist.length) {
     form.append("password", values.password);
 
     const res = await fileToBase64()
@@ -131,7 +141,11 @@ export const newUser = async (values) => {
           body: form,
         });
     })
+
+    return await res.json();
   }
 
-  return await res.json();
+  return await res.status(400).json(
+    {error: true}
+  )
 }

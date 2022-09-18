@@ -256,7 +256,6 @@ export const registerUser = async (req, res) => {
         fs.writeFileSync(path.join(__dirname, '../../dbimages/users/'+user.username+'.png'),
         base64Data, {encoding: 'base64'});
 
-
         res.json({
             error: null,
             data: rows

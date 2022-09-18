@@ -25,28 +25,25 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const initialState = {username:'', password: ''};
   const [user, setUser] = useState(initialState);
-  const [aux, setAux] = useState(initialState);
-  const [isLoading, setIsLoading] = useState(false);
   const { userToken } = useSelector(selectUser);
-
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId: `${CREDENTIALS_GOOGLE_WEB}`,
     iosClientId: `${CREDENTIALS_GOOGLE_IOS}`
   });
 
   useEffect(() => {
-    const getToken = async() => {
-      const token = await AsyncStorage.getItem('token');
-
-      dispatch(login({
-        userToken: token
-      }));
-
-      if(token !== null) navigation.navigate('Home')
-    }
-    
     getToken();
   }, []);
+
+  const getToken = async() => {
+    const token = await AsyncStorage.getItem('token');
+
+    dispatch(login({
+      userToken: token
+    }));
+
+    if(token !== null) navigation.navigate('Locations')
+  }
 
   useEffect(() => {
     if (response?.type === 'success') {
@@ -58,18 +55,18 @@ const LoginScreen = () => {
     }
   }, [response, userToken]);
 
-  async function fetchUserInfo() {
+  const fetchUserInfo = async () => {
     let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
       headers: { Authorization: `Bearer ${userToken}` }
     });
 
     await AsyncStorage.setItem('token', userToken);
-    
+
     const {given_name,family_name, email, picture } = await response.json();
 
     const user = { first_name: given_name, second_name: family_name, username: email, email: email, password: null, image: picture, social: 'Google'}
 
-    const userRow = await newUser(user);
+    await newUser(user);
 
     navigation.navigate('Home');
 
@@ -99,7 +96,7 @@ const LoginScreen = () => {
           );
 
           setUser(initialState);
-          navigation.navigate('Home');
+          navigation.navigate('Locations');
 
         } else {
           Alert.alert(
@@ -120,7 +117,6 @@ const LoginScreen = () => {
     validateUser(values);
   }
 
-  {isLoading && <Text>Esta cargando</Text> }
    return (
     <>      
         <View
@@ -165,9 +161,7 @@ const LoginScreen = () => {
                 <TextInput 
                   style={styles.username} 
                   placeholder="JhonDoe"
-                  onChangeText={handleChange('username')
-                    // setUser({...user, username: values.username})
-                  }
+                  onChangeText={handleChange('username')}
                   onChange={(e) => setUser({...user, username: e.target.value})}
                   onBlur={handleBlur('username')}
                   value={values.username}
@@ -181,10 +175,7 @@ const LoginScreen = () => {
                 <TextInput 
                   style={styles.password} 
                   placeholder="**********"
-                  onChangeText={
-                    handleChange('password')
-                    // setUser({...user, password: values.password})
-                  }
+                  onChangeText={handleChange('password')}
                   onChange={(e) => setUser({...user, password: e.target.value})}
                   onBlur={handleBlur('password')}
                   value={values.password}
