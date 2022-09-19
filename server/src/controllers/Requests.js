@@ -291,3 +291,15 @@ export const registerUserWithGoogle = async (req, res) => {
     res.status(400).json({error})
   }
 }
+
+export const getLocationsForId = async (req, res) => {
+  const connection = await connect();
+
+  const [rows] = await connection.execute(
+      "SELECT * FROM direction " +
+      "WHERE user_id = ?", [
+      req.params.id,
+  ]);
+
+  res.json(rows);
+};

@@ -14,7 +14,8 @@ import {
   getUser,
   registerUser,
   existUser,
-  registerUserWithGoogle
+  registerUserWithGoogle,
+  getLocationsForId
 } from "../controllers/Requests.js";
 
 const router = Router();
@@ -49,5 +50,6 @@ router.post("/register", registerUser);
 
 router.post("/registerWithGoogle", registerUserWithGoogle);
 
+router.get("/location/:id", getLocationsForId);
 
 export default router;

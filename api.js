@@ -149,3 +149,8 @@ export const newUser = async (values) => {
     {error: true}
   )
 }
+
+export const getLocationsForId  = async (id) => {
+  const res = await fetch(`${API}/location/${id}`);
+  return await res.json();
+}
