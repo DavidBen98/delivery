@@ -23,7 +23,7 @@ export default function App() {
           <Stack.Navigator>
             <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
             <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
-            <Stack.Screen name="Locations" component={LocationsScreen} />
+            <Stack.Screen name="Locations" component={LocationsScreen} options={{ headerShown:false }}/>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Restaurant" component={RestaurantScreen} />
             <Stack.Screen name="Basket" component={BasketScreen} 
