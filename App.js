@@ -1,7 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeDrawerNavigator } from '@react-navigation/native-Drawer';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import 'react-native-gesture-handler';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import HomeScreen from './screens/HomeScreen';
 import BasketScreen from './screens/BasketScreen';
@@ -13,33 +15,35 @@ import OpinionsScreen from './screens/OpinionsScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LocationsScreen from './screens/LocationsScreen';
+import PanelModalScreen from './screens/PanelModalScreen';
 
-const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
       <Provider store={store}>
-          <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
-            <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
-            <Stack.Screen name="Locations" component={LocationsScreen} options={{ headerShown:false }}/>
-            <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown:false }}/>
-            <Stack.Screen name="Restaurant" component={RestaurantScreen} options={{ headerShown:false }}/>
-            <Stack.Screen name="Basket" component={BasketScreen} 
-            options={{ presentation: 'modal', headerShown:false }}/>
-            <Stack.Screen name="PreparingOrder" component={PreparingOrderScreen} 
-            options={{ presentation: 'fullScreenModal', headerShown:false }}/>
-            {/* <Stack.Screen 
-              name="Delivery" 
-              component={DeliveryScreen} 
-              options={{ presentation: 'fullScreenModal', headerShown:false }}
-            /> */}
-            <Stack.Screen name="Image" component={ImageScreen} 
-            options={{ presentation: 'modal', headerShown:false }}/>
-            <Stack.Screen name="Opinions" component={OpinionsScreen} 
-            options={{ presentation: 'modal', headerShown:false }}/>
-          </Stack.Navigator>
+        <Drawer.Navigator useLegacyImplementation>
+          <Drawer.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
+          <Drawer.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
+          <Drawer.Screen name="Locations" component={LocationsScreen} options={{ headerShown:false }}/>
+          <Drawer.Screen name="Home" component={HomeScreen} options={{ headerShown:false }}/>
+          <Drawer.Screen name="Restaurant" component={RestaurantScreen} options={{ headerShown:false }}/>
+          <Drawer.Screen name="Basket" component={BasketScreen} 
+          options={{ presentation: 'modal', headerShown:false }}/>
+          <Drawer.Screen name="PreparingOrder" component={PreparingOrderScreen} 
+          options={{ presentation: 'fullScreenModal', headerShown:false }}/>
+          <Drawer.Screen name="Panel" component={PanelModalScreen} options={{ presentation: 'modal', headerShown:false }}/>
+          {/* <Drawer.Screen 
+            name="Delivery" 
+            component={DeliveryScreen} 
+            options={{ presentation: 'fullScreenModal', headerShown:false }}
+          /> */}
+          <Drawer.Screen name="Image" component={ImageScreen} 
+          options={{ presentation: 'modal', headerShown:false }}/>
+          <Drawer.Screen name="Opinions" component={OpinionsScreen} 
+          options={{ presentation: 'modal', headerShown:false }}/>
+      </Drawer.Navigator>
       </Provider>
     </NavigationContainer>
   );
