@@ -7,6 +7,8 @@ import {
   ChevronDownIcon,
   SearchIcon,
   AdjustmentsIcon,
+  BellIcon
+  
 } from "react-native-heroicons/outline"
 import { ScrollView } from 'react-native';
 import CategoriesDish from '../components/CategoriesDish';
@@ -47,49 +49,51 @@ const HomeScreen = () => {
 
   return (
     <>
-      <SafeAreaView style={tw `bg-white pt-5`}>
-            <View style={tw `flex-row pb-3 items-center mx-4 space-x-2`}>
-              <Image 
-                source={require(`../server/dbimages/users/${data.username}.png`)}
-                style={tw `h-7 w-7 bg-gray-300 p-4 rounded-full`}
-              />
+      <SafeAreaView style={tw `bg-white pt-5 pb-2`}>
+        <View style={tw `flex-row items-center justify-between px-4 space-x-2 w-full`}>
 
-              <View style={tw `flex-1`}>
-                <TouchableOpacity onPress={() => navigation.navigate('Locations')}>
-                  <Text style={tw `font-bold text-gray-400 text-xs mx-2`}>
-                    Deliver Now!
-                  </Text>
-                  <Text style={tw `font-bold text-xl`}>
-                    <Text style={tw `mx-2`}>{data?.ubication?.ubication?.address}</Text>
-                      <ChevronDownIcon size={20} color="#00CCBB"/>
-                  </Text>
-                </TouchableOpacity>
-              </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Locations')}>
+            <Image 
+              source={require(`../server/dbimages/users/${data.username}.png`)}
+              style={tw `h-7 w-7 bg-gray-300 p-4 rounded-full`}
+            />
+          </TouchableOpacity>
 
-              <UserIcon size={35} color="#00CCBB" />
-            </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Locations')}>
+            <Text style={tw `font-bold flex`}>
+              <Text style={tw `mx-2`}>
+                {data?.ubication?.ubication?.address}
+              </Text>
+                <ChevronDownIcon size={20} color="#00CCBB"/>
+            </Text>
+          </TouchableOpacity>
 
-            <View style={tw `flex-row items-center space-x-2 pb-2 mx-4`}>
-              <View style={tw `flex-row flex-1 space-x-2 bg-gray-200 p-3 rounded-xl`}>
-                <SearchIcon color="gray" size={20}/>
-                <TextInput 
-                  placeholder="Restaurants and cuisines" 
-                  keyboardType="default"
-                  style={tw `pl-2`}
-                  />
-              </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Locations')}>
+            <BellIcon size={30} color="#00CCBB" />
+          </TouchableOpacity>
 
-              <AdjustmentsIcon color='#00CCBB' style={tw `ml-1`}/>
-            </View>
-
+        </View>
       </SafeAreaView>
       
       <ScrollView 
-        style={tw `bg-gray `}
+        style={tw `bg-gray`}
         contentContainerStyle={{
           paddingBottom: 100,
         }}
       >
+        <View style={tw `flex-row items-center space-x-2 py-2 mx-4`}>
+          <View style={tw `flex-row flex-1 space-x-2 bg-white p-3 rounded-xl`}>
+            <SearchIcon color="gray" size={20}/>
+            <TextInput 
+              placeholder="Restaurants and cuisines" 
+              keyboardType="default"
+              style={tw `pl-2`}
+              />
+          </View>
+
+          <AdjustmentsIcon color='#00CCBB' style={tw `ml-1`}/>
+        </View>
+        
         {categoriesRestaurants?.map((category) => (
             <FeaturedRow
               key={category.id}
