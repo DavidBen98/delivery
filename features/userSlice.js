@@ -17,11 +17,14 @@ export const userSlice = createSlice({
     },
     setData: (state, action) => {
       state.data = action.payload.data
+    },
+    setUbication: (state, action) => {
+      state.data.ubication = action.payload
     }
   },
 });
 
-export const { login, logout, setData } = userSlice.actions;
+export const { login, logout, setData, setUbication } = userSlice.actions;
 
 export const selectUser = (state) => state.user;
 

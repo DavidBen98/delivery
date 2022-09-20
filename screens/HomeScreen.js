@@ -13,11 +13,15 @@ import CategoriesDish from '../components/CategoriesDish';
 import FeaturedRow from '../components/FeaturedRow';
 import { getCategoriesDish, getCategoriesRestaurants } from "../api";
 import tw from 'twrnc';
+import { selectUser } from '../features/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { TouchableOpacity } from 'react-native-web';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [categoriesRestaurants, setCategoriesRestaurants] = useState([]);
   const [categoriesDishes, setCategoriesDishes] = useState([]);
+  const { data } = useSelector(selectUser);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -60,12 +64,14 @@ const HomeScreen = () => {
               />
 
               <View style={tw `flex-1`}>
-                <Text style={tw `font-bold text-gray-400 text-xs`}>
+                <Text style={tw `font-bold text-gray-400 text-xs mx-2`}>
                   Deliver Now!
                 </Text>
                 <Text style={tw `font-bold text-xl`}>
-                  Current Location
-                  <ChevronDownIcon size={20} color="#00CCBB" />
+                  <Text style={tw `mx-2`}>{data.ubication.ubication.address}</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('Locations')}>
+                    <ChevronDownIcon size={20} color="#00CCBB"/>
+                  </TouchableOpacity>
                 </Text>
               </View>
 
@@ -73,11 +79,12 @@ const HomeScreen = () => {
             </View>
 
             <View style={tw `flex-row items-center space-x-2 pb-2 mx-4`}>
-              <View style={tw `flex-row flex-1 space-x-2 bg-gray-200 p-3`}>
+              <View style={tw `flex-row flex-1 space-x-2 bg-gray-200 p-3 rounded-xl`}>
                 <SearchIcon color="gray" size={20}/>
                 <TextInput 
                   placeholder="Restaurants and cuisines" 
                   keyboardType="default"
+                  style={tw `pl-2`}
                   />
               </View>
 

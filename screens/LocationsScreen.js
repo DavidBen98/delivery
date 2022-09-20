@@ -3,15 +3,17 @@ import React, { useState, useEffect } from 'react'
 import { ArrowLeftIcon, LocationMarkerIcon, MenuIcon } from 'react-native-heroicons/outline';
 import tw from 'twrnc';
 
-import { selectUser, setData } from '../features/userSlice';
+import { selectUser, setData, setUbication } from '../features/userSlice';
 import { getDataUser, getLocationsForId } from "../api";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const LocationsScreen = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(selectUser);
     const [ubications, setUbications] = useState ([]);
+    const navigation = useNavigation();
 
     useEffect(() => { 
       decodedToken();  
@@ -38,8 +40,6 @@ const LocationsScreen = () => {
       try {
         const locations = await getLocationsForId(id);
 
-        console.log(locations);
-        
         setUbications(locations);
       } catch (error) {
         console.log(error); 
@@ -62,10 +62,10 @@ const LocationsScreen = () => {
                 </View>
                 <TouchableOpacity style={tw `text-xs w-full flex wrap m-1 p-1 pl-5 flex-row border-b border-gray-300 border-solid`}>
                     <View style={tw `flex justify-center`}>
-                    <Image
-                      source={require(`../assets/painpoint.png`)}
-                      style={tw `h-[17px] w-[17px]`}
-                    />
+                      <Image
+                        source={require(`../assets/painpoint.png`)}
+                        style={tw `h-[17px] w-[17px]`}
+                      />
                     </View>
                     <View style={tw `text-xs flex wrap w-10/12 pt-1`}>
                       <Text style={tw `p-2 mb-1 pl-4 font-medium`}>My ubication actually</Text>
@@ -73,7 +73,14 @@ const LocationsScreen = () => {
                 </TouchableOpacity>
                 {ubications?.map((ubication)=>(
                         <>
-                            <TouchableOpacity key={ubication.id} style={tw `text-xs w-full flex wrap m-1 p-1 pl-4 flex-row border-b border-gray-300 border-solid`}>
+                            <TouchableOpacity 
+                              key={ubication.id} 
+                              style={tw `text-xs w-full flex wrap m-1 p-1 pl-4 flex-row border-b border-gray-300 border-solid`}
+                              onPress={() => {
+                                dispatch(setUbication({ubication: ubication}));
+                                navigation.navigate('Home');
+                              }}
+                            >
                                 <View style={tw `flex justify-center pb-1`}>
                                   <LocationMarkerIcon size={20} color="#00CCBB" />
                                 </View>
