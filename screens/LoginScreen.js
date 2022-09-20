@@ -4,7 +4,7 @@ import tw from 'twrnc';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { getUser } from "../api";
+import { getUser, newUser, createToken } from "../api";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useNavigation } from '@react-navigation/native';
@@ -15,8 +15,6 @@ import { login, selectUser } from '../features/userSlice';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { CREDENTIALS_GOOGLE_WEB, CREDENTIALS_GOOGLE_IOS } from '@env';
-
-import { newUser } from "../api";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -47,29 +45,33 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (response?.type === 'success') {
-      dispatch(login({
-        userToken: response.authentication.accessToken
-      }));
+      // dispatch(login({
+      //   userToken: response.authentication.accessToken
+      // }));
 
-      userToken !== null && fetchUserInfo();
+      token = response.authentication.accessToken;
+
+      token !== null && fetchUserInfo(token);
     }
   }, [response, userToken]);
 
-  const fetchUserInfo = async () => {
+  const fetchUserInfo = async (token) => {
     let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-      headers: { Authorization: `Bearer ${userToken}` }
+      headers: { Authorization: `Bearer ${token}` }
     });
-
-    await AsyncStorage.setItem('token', userToken);
 
     const {given_name,family_name, email, picture } = await response.json();
 
+    
     const user = { first_name: given_name, second_name: family_name, username: email, email: email, password: null, image: picture, social: 'Google'}
+    
+    const requestUser = await newUser(user);
+    
+    const tokenCreated = await createToken(requestUser.data);
 
-    await newUser(user);
+    await AsyncStorage.setItem('token', tokenCreated);
 
-    navigation.navigate('Home');
-
+    navigation.navigate('Locations');
   }
 
   const loginValidationSchema = yup.object().shape({

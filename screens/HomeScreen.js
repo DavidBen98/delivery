@@ -1,5 +1,5 @@
-import { View, Text, Image, TextInput } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -15,19 +15,12 @@ import { getCategoriesDish, getCategoriesRestaurants } from "../api";
 import tw from 'twrnc';
 import { selectUser } from '../features/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { TouchableOpacity } from 'react-native-web';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [categoriesRestaurants, setCategoriesRestaurants] = useState([]);
   const [categoriesDishes, setCategoriesDishes] = useState([]);
   const { data } = useSelector(selectUser);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  },[]);
 
   const getCategoriesLocale = async () => {
     try {
@@ -57,22 +50,20 @@ const HomeScreen = () => {
       <SafeAreaView style={tw `bg-white pt-5`}>
             <View style={tw `flex-row pb-3 items-center mx-4 space-x-2`}>
               <Image 
-                source={{
-                  uri:'https://links.papareact.com/wru'
-                }}
+                source={require(`../server/dbimages/users/${data.username}.png`)}
                 style={tw `h-7 w-7 bg-gray-300 p-4 rounded-full`}
               />
 
               <View style={tw `flex-1`}>
-                <Text style={tw `font-bold text-gray-400 text-xs mx-2`}>
-                  Deliver Now!
-                </Text>
-                <Text style={tw `font-bold text-xl`}>
-                  <Text style={tw `mx-2`}>{data.ubication.ubication.address}</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Locations')}>
-                    <ChevronDownIcon size={20} color="#00CCBB"/>
-                  </TouchableOpacity>
-                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Locations')}>
+                  <Text style={tw `font-bold text-gray-400 text-xs mx-2`}>
+                    Deliver Now!
+                  </Text>
+                  <Text style={tw `font-bold text-xl`}>
+                    <Text style={tw `mx-2`}>{data?.ubication?.ubication?.address}</Text>
+                      <ChevronDownIcon size={20} color="#00CCBB"/>
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <UserIcon size={35} color="#00CCBB" />
@@ -88,7 +79,7 @@ const HomeScreen = () => {
                   />
               </View>
 
-              <AdjustmentsIcon color='#00CCBB'/>
+              <AdjustmentsIcon color='#00CCBB' style={tw `ml-1`}/>
             </View>
 
       </SafeAreaView>

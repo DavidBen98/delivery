@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity, TextInput, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { ArrowLeftIcon, LocationMarkerIcon, MenuIcon } from 'react-native-heroicons/outline';
+import { LocationMarkerIcon, MenuIcon } from 'react-native-heroicons/outline';
 import tw from 'twrnc';
 
 import { selectUser, setData, setUbication } from '../features/userSlice';
@@ -24,7 +24,7 @@ const LocationsScreen = () => {
       
       try {
         const userRow = await getDataUser(token);
-       
+
         dispatch(setData({
           data: userRow
         }));
@@ -72,25 +72,24 @@ const LocationsScreen = () => {
                     </View>
                 </TouchableOpacity>
                 {ubications?.map((ubication)=>(
-                        <>
-                            <TouchableOpacity 
-                              key={ubication.id} 
-                              style={tw `text-xs w-full flex wrap m-1 p-1 pl-4 flex-row border-b border-gray-300 border-solid`}
-                              onPress={() => {
-                                dispatch(setUbication({ubication: ubication}));
-                                navigation.navigate('Home');
-                              }}
-                            >
-                                <View style={tw `flex justify-center pb-1`}>
-                                  <LocationMarkerIcon size={20} color="#00CCBB" />
-                                </View>
-                                <View style={tw `text-xs flex wrap w-10/12 pt-1`}>
-                                    <Text style={tw `p-2 mb-1 pl-4`}>{ubication.address}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </>
-                    )
-                )}
+                  <>
+                      <TouchableOpacity 
+                        key={ubication.id} 
+                        style={tw `text-xs w-full flex wrap m-1 p-1 pl-4 flex-row border-b border-gray-300 border-solid`}
+                        onPress={() => {
+                          dispatch(setUbication({ubication: ubication}));
+                          navigation.navigate('Home');
+                        }}
+                      >
+                          <View style={tw `flex justify-center pb-1`}>
+                            <LocationMarkerIcon size={20} color="#00CCBB" />
+                          </View>
+                          <View style={tw `text-xs flex wrap w-10/12 pt-1`}>
+                              <Text style={tw `p-2 mb-1 pl-4`}>{ubication.address}</Text>
+                          </View>
+                      </TouchableOpacity>
+                  </>
+                ))}
             </View>
         </View>
       </>

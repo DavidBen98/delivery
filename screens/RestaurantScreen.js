@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image, TouchableOpacity, Alert } from 'react-native'
-import React, { useLayoutEffect, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ArrowLeftIcon, ChevronRightIcon, LocationMarkerIcon, StarIcon } from "react-native-heroicons/solid";
 import { QuestionMarkCircleIcon } from "react-native-heroicons/outline";
@@ -59,12 +59,6 @@ const RestaurantScreen = () => {
             console.log(error); 
         }
     }
-    
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown:false,
-        });
-    }, []);
 
     const goBackAlert = () => {
         if (items.length > 0) {

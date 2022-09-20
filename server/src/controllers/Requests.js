@@ -105,7 +105,6 @@ export const getDishesForCategory = async (req, res) => {
   res.json(rows);
 };
 
-
 export const getDishesForCategoryOfRestaurant = async (req, res) => {
   const connection = await connect();
 
@@ -169,6 +168,7 @@ export const getUser = async (req, res) => {
       second_name: rows[0].second_name,
       username: rows[0].username,
       email: rows[0].email,
+      image: rows[0].image
     }, process.env.TOKEN_SECRET);
 
     res.header('auth-token', token).json({
@@ -182,7 +182,7 @@ export const existUser = async(req, res) => {
   const connection = await connect();
 
   const [rows] = await connection.execute(
-      "SELECT email FROM user " +
+      "SELECT * FROM user " +
       "WHERE email = ?", [
       req.body.email,
   ]);
@@ -279,13 +279,21 @@ export const registerUserWithGoogle = async (req, res) => {
 
   try {
     const [rows] = await connection.execute(
-        "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`, `image`) " +
-        `VALUES ("${user.first_name}", "${user.second_name}","${user.username}","${user.password}", "${user.email}", "${user.image}")`
+      "INSERT INTO `user`(`first_name`, `second_name`, `username`, `password`, `email`, `image`) " +
+      `VALUES ("${user.first_name}", "${user.second_name}","${user.username}","${user.password}", "${user.email}", "${user.image}")`
     );
 
+    const userRegister = await fetch(`${API}/user`, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify({
+        email: user.email,
+      }),
+    }).then((data) => data.json()).then((data) => data);
+    
     res.json({
         error: null,
-        data: rows
+        data: userRegister
     })
   } catch (error) {
     res.status(400).json({error})

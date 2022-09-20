@@ -85,6 +85,21 @@ export const getDataUser = async (token) => {
   return res;
 }
 
+export const createToken = async (rows) => {
+  const jwt = require('jsonwebtoken');
+
+  const token = jwt.sign({
+    id: rows[0].id,
+    first_name: rows[0].first_name,
+    second_name: rows[0].second_name,
+    username: rows[0].username,
+    email: rows[0].email,
+    image: rows[0].image
+  }, TOKEN_SECRET);
+
+  return token
+}
+
 export const newUser = async (values) => {
   var form = new URLSearchParams();
   form.append('first_name', values.first_name);
@@ -112,11 +127,11 @@ export const newUser = async (values) => {
       email: values.email,
     }),
   }).then((data) => data.json()).then((data) => data);
-
+  
   //Inicio de sesión desde Google
-  if (!exist.length && values.social === 'Google') {
-      form.append("password", null);
-      form.append("image", values.image);
+  if (exist.length === 0 && values.social === 'Google') {
+    form.append("password", null);
+    form.append("image", values.image);
 
       const res = await fetch(`${API}/registerWithGoogle`, {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -126,7 +141,7 @@ export const newUser = async (values) => {
       
       return await res.json();
   //Registración  
-  } else if (!exist.length) {
+  } else if (exist.length === 0) {
     form.append("password", values.password);
 
     const res = await fileToBase64()
@@ -145,9 +160,7 @@ export const newUser = async (values) => {
     return await res.json();
   }
 
-  return await res.status(400).json(
-    {error: true}
-  )
+  return await exist
 }
 
 export const getLocationsForId  = async (id) => {
