@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeDrawerNavigator } from '@react-navigation/native-Drawer';
+// import { createNativeDrawerNavigator } from '@react-navigation/native-Drawer';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import 'react-native-gesture-handler';
@@ -15,7 +15,7 @@ import OpinionsScreen from './screens/OpinionsScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LocationsScreen from './screens/LocationsScreen';
-import PanelModalScreen from './screens/PanelModalScreen';
+import CustomDrawer from './components/CustomDrawer';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,7 +23,24 @@ export default function App() {
   return (
     <NavigationContainer>
       <Provider store={store}>
-        <Drawer.Navigator useLegacyImplementation>
+        <Drawer.Navigator 
+          useLegacyImplementation 
+          drawerContent={props => 
+            <CustomDrawer {...props} 
+              screenOptions={{
+                headerShown: false,
+                drawerActiveBackgroundColor: '#00CCBB',
+                drawerActiveTintColor: '#fff',
+                drawerInactiveTintColor: '#333',
+                drawerLabelTintColor: '#fff',
+                drawerLabelStyle: {
+                  marginLeft: -25,
+                  fontFamily: 'Roboto-Medium',
+                  fontSize: 15,
+                }
+            }}
+          />}
+        >
           <Drawer.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Drawer.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Drawer.Screen name="Locations" component={LocationsScreen} options={{ headerShown:false }}/>
@@ -33,7 +50,6 @@ export default function App() {
           options={{ presentation: 'modal', headerShown:false }}/>
           <Drawer.Screen name="PreparingOrder" component={PreparingOrderScreen} 
           options={{ presentation: 'fullScreenModal', headerShown:false }}/>
-          <Drawer.Screen name="Panel" component={PanelModalScreen} options={{ presentation: 'modal', headerShown:false }}/>
           {/* <Drawer.Screen 
             name="Delivery" 
             component={DeliveryScreen} 
@@ -43,7 +59,7 @@ export default function App() {
           options={{ presentation: 'modal', headerShown:false }}/>
           <Drawer.Screen name="Opinions" component={OpinionsScreen} 
           options={{ presentation: 'modal', headerShown:false }}/>
-      </Drawer.Navigator>
+        </Drawer.Navigator>
       </Provider>
     </NavigationContainer>
   );
