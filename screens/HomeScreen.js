@@ -17,6 +17,10 @@ import { getCategoriesDish, getCategoriesRestaurants } from "../api";
 import tw from 'twrnc';
 import { selectUser } from '../features/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import CustomDrawer from '../components/CustomDrawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+const Drawer = createDrawerNavigator();
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -54,7 +58,7 @@ const HomeScreen = () => {
 
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <Image 
-              source={require(`../server/dbimages/users/${data.username}.png`)}
+              source={require(`../server/dbimages/users/1.png`)}
               style={tw `h-7 w-7 bg-gray-300 p-4 rounded-full`}
             />
           </TouchableOpacity>
@@ -112,6 +116,27 @@ const HomeScreen = () => {
             />
         ))}
       </ScrollView>
+
+      <Drawer.Navigator 
+        useLegacyImplementation 
+        drawerContent={props => 
+          <CustomDrawer {...props} 
+            screenOptions={{
+              headerShown: false,
+              drawerActiveBackgroundColor: '#00CCBB',
+              drawerActiveTintColor: '#fff',
+              drawerInactiveTintColor: '#333',
+              drawerLabelTintColor: '#fff',
+              drawerLabelStyle: {
+                marginLeft: -25,
+                fontFamily: 'Roboto-Medium',
+                fontSize: 15,
+              }
+          }}
+        />}
+      >
+        <Drawer.Screen name="Home" component={HomeScreen} options={{ headerShown:false }}/>
+      </Drawer.Navigator>
     </>
   );
 }

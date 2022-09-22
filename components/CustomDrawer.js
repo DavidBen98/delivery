@@ -10,7 +10,7 @@ const CustomDrawer = (props) => {
 
   return (
     <View>
-      <DrawerContentScrollView {...props} contentContainerStyle={{backgroundColor:'#00CCBB'}}>
+      <DrawerContentScrollView {...props} contentContainerStyle={{backgroundColor:'#fff'}}>
         {/* <ImageBackground source={require(`../server/dbimages/users/${data?.username}.png`)} style={{padding:20}}>
           <Image source={require('../assets/icon.png')} style={{height:80,width: 80, borderRadius: 40, marginBottom: 10}} />
           <Text style={{color:'#fff', fontSize:18, fontFamily:'Roboto-Medium'}}>John Doe</Text>

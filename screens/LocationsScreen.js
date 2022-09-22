@@ -78,7 +78,7 @@ const LocationsScreen = () => {
                         style={tw `text-xs w-full flex wrap m-1 p-1 pl-4 flex-row border-b border-gray-300 border-solid`}
                         onPress={() => {
                           dispatch(setUbication({ubication: ubication}));
-                          navigation.navigate('Home');
+                          navigation.navigate('HomeApp');
                         }}
                       >
                           <View style={tw `flex justify-center pb-1`}>
