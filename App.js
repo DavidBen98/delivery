@@ -21,6 +21,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import CustomDrawer from './components/CustomDrawer';
 
 import { ScrollView, SafeAreaView, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
+import CustomDrawerContent from './components/CustomDrawerContent';
 
 
 const Drawer = createDrawerNavigator();
@@ -33,31 +34,10 @@ function DrawerNavigator({navigation}) {
   return (
     <Drawer.Navigator 
       drawerContent={() =>             
-        <SafeAreaView style={{flex: 1}}>
-
-        <ScrollView style={{marginLeft: 5}}>
-          <TouchableOpacity
-            style={{marginTop: 20}}
-            onPress={() => this.props.navigation.navigate('Home')}
-          >
-            <Text>Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-          style={{marginTop: 20}}
-          onPress={() => this.props.navigation.navigate('Settings')}
-          >
-            <Text>Settings</Text>
-          </TouchableOpacity>
-        </ScrollView>
-          {/* <TouchableOpacity
-          style={{marginTop: 20, marginLeft: 5}}
-          onPress={() => this.props.navigation.navigate('Login')}
-          >
-            <Text>Logout</Text>
-          </TouchableOpacity> */}
-      </SafeAreaView>}>
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Settings" component={SettingsScreen} />
+        <CustomDrawerContent />
+    }>
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
     </Drawer.Navigator>
   )
 }
@@ -84,8 +64,8 @@ export default function App() {
           //   }}
           // />}
         >
-          {/* <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/> */}
           <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
+          <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Locations" component={LocationsScreen} options={{ headerShown:false }}/>
           <Stack.Screen name="HomeApp" component={DrawerNavigator} options={navOptionHandler}/>
           {/* <Drawer.Screen name="Restaurant" component={RestaurantScreen} options={{ headerShown:false }}/>

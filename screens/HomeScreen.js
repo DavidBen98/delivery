@@ -1,6 +1,5 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   UserIcon,
@@ -17,13 +16,8 @@ import { getCategoriesDish, getCategoriesRestaurants } from "../api";
 import tw from 'twrnc';
 import { selectUser } from '../features/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import CustomDrawer from '../components/CustomDrawer';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 
-const Drawer = createDrawerNavigator();
-
-const HomeScreen = () => {
-  const navigation = useNavigation();
+const HomeScreen = ({navigation}) => {
   const [categoriesRestaurants, setCategoriesRestaurants] = useState([]);
   const [categoriesDishes, setCategoriesDishes] = useState([]);
   const { data } = useSelector(selectUser);
@@ -116,27 +110,6 @@ const HomeScreen = () => {
             />
         ))}
       </ScrollView>
-
-      <Drawer.Navigator 
-        useLegacyImplementation 
-        drawerContent={props => 
-          <CustomDrawer {...props} 
-            screenOptions={{
-              headerShown: false,
-              drawerActiveBackgroundColor: '#00CCBB',
-              drawerActiveTintColor: '#fff',
-              drawerInactiveTintColor: '#333',
-              drawerLabelTintColor: '#fff',
-              drawerLabelStyle: {
-                marginLeft: -25,
-                fontFamily: 'Roboto-Medium',
-                fontSize: 15,
-              }
-          }}
-        />}
-      >
-        <Drawer.Screen name="Home" component={HomeScreen} options={{ headerShown:false }}/>
-      </Drawer.Navigator>
     </>
   );
 }
