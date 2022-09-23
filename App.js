@@ -3,9 +3,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-// import { createStackNavigator } from '@react-navigation/native-stack';
 import {createStackNavigator} from '@react-navigation/stack'
-// import { createAppContainer } from 'react-navigation';
 
 import HomeScreen from './screens/HomeScreen';
 import BasketScreen from './screens/BasketScreen';
@@ -18,9 +16,6 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LocationsScreen from './screens/LocationsScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import CustomDrawer from './components/CustomDrawer';
-
-import { ScrollView, SafeAreaView, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import CustomDrawerContent from './components/CustomDrawerContent';
 
 
@@ -36,8 +31,8 @@ function DrawerNavigator({navigation}) {
       drawerContent={() =>             
         <CustomDrawerContent />
     }>
-      <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
+      <Drawer.Screen name="Home" component={HomeScreen} options={navOptionHandler}/>
+      <Drawer.Screen name="Settings" component={SettingsScreen} options={navOptionHandler}/>
     </Drawer.Navigator>
   )
 }
@@ -66,22 +61,22 @@ export default function App() {
         >
           <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
-          <Stack.Screen name="Locations" component={LocationsScreen} options={{ headerShown:false }}/>
+          <Stack.Screen name="Locations" component={LocationsScreen} options={navOptionHandler}/>
           <Stack.Screen name="HomeApp" component={DrawerNavigator} options={navOptionHandler}/>
-          {/* <Drawer.Screen name="Restaurant" component={RestaurantScreen} options={{ headerShown:false }}/>
-          <Drawer.Screen name="Basket" component={BasketScreen} 
+          <Stack.Screen name="Restaurant" component={RestaurantScreen} options={navOptionHandler}/>
+          <Stack.Screen name="Basket" component={BasketScreen} 
           options={{ presentation: 'modal', headerShown:false }}/>
-          <Drawer.Screen name="PreparingOrder" component={PreparingOrderScreen} 
-          options={{ presentation: 'fullScreenModal', headerShown:false }}/> */}
-          {/* <Drawer.Screen 
+          <Stack.Screen name="PreparingOrder" component={PreparingOrderScreen} 
+          options={{ presentation: 'fullScreenModal', headerShown:false }}/>
+          <Stack.Screen name="Image" component={ImageScreen} 
+          options={{ presentation: 'modal', headerShown:false }}/>
+          <Stack.Screen name="Opinions" component={OpinionsScreen} 
+          options={{ presentation: 'modal', headerShown:false }}/>
+          {/* <Stack.Screen 
             name="Delivery" 
             component={DeliveryScreen} 
             options={{ presentation: 'fullScreenModal', headerShown:false }}
           /> */}
-          {/* <Drawer.Screen name="Image" component={ImageScreen} 
-          options={{ presentation: 'modal', headerShown:false }}/>
-          <Drawer.Screen name="Opinions" component={OpinionsScreen} 
-          options={{ presentation: 'modal', headerShown:false }}/> */}
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>

@@ -31,18 +31,35 @@ export const getCategoriesRestaurants = async (req, res) => {
 
 export const getRestaurantsForCategory = async (req, res) => {
   const connection = await connect();
+  let query = "";
+  let rows = [];
 
-  const query = "SELECT restaurant.id, restaurant.name, restaurant.image, " + 
-  "restaurant.city, restaurant.address, restaurant.latitude, " +
-  "restaurant.longitude, restaurant.phone, restaurant.opening_time, " +
-  "restaurant.closing_time FROM `restaurant` " +
-  "INNER JOIN category_restaurant ON restaurant.id = category_restaurant.restaurant_id " +
-  "INNER JOIN categories_restaurant ON categories_restaurant.id = category_restaurant.category_id " +
-  "WHERE category_restaurant.category_id = ?";
+  if (req.params.id === 1){
+    query = "SELECT restaurant.id, restaurant.name, restaurant.image, " + 
+    "restaurant.city, restaurant.address, restaurant.latitude, " +
+    "restaurant.longitude, restaurant.phone, restaurant.opening_time, " +
+    "restaurant.closing_time FROM `restaurant` " +
+    "INNER JOIN category_restaurant ON restaurant.id = category_restaurant.restaurant_id " +
+    "INNER JOIN categories_restaurant ON categories_restaurant.id = category_restaurant.category_id " +
+    "WHERE category_restaurant.category_id = ? AND category_restaurant.user_id = ?";
 
-  const [rows] = await connection.execute(query, [
-    req.params.id
-  ]);
+    [rows] = await connection.execute(query, [
+      req.params.id,
+      req.params.user_id
+    ]);
+  } else {
+    query = "SELECT restaurant.id, restaurant.name, restaurant.image, " + 
+    "restaurant.city, restaurant.address, restaurant.latitude, " +
+    "restaurant.longitude, restaurant.phone, restaurant.opening_time, " +
+    "restaurant.closing_time FROM `restaurant` " +
+    "INNER JOIN category_restaurant ON restaurant.id = category_restaurant.restaurant_id " +
+    "INNER JOIN categories_restaurant ON categories_restaurant.id = category_restaurant.category_id " +
+    "WHERE category_restaurant.category_id = ?";
+
+    [rows] = await connection.execute(query, [
+      req.params.id
+    ]);
+  }
 
   rows.map(restaurant => (
     fs.writeFileSync(path.join(__dirname, '../../dbimages/restaurants/' + restaurant.id + ".png"),
