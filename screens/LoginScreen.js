@@ -45,10 +45,6 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (response?.type === 'success') {
-      // dispatch(login({
-      //   userToken: response.authentication.accessToken
-      // }));
-
       token = response.authentication.accessToken;
 
       token !== null && fetchUserInfo(token);
@@ -61,7 +57,6 @@ const LoginScreen = () => {
     });
 
     const {given_name,family_name, email, picture } = await response.json();
-
     
     const user = { first_name: given_name, second_name: family_name, username: email, email: email, password: null, image: picture, social: 'Google'}
     

@@ -1,14 +1,7 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  UserIcon,
-  ChevronDownIcon,
-  SearchIcon,
-  AdjustmentsIcon,
-  BellIcon
-  
-} from "react-native-heroicons/outline"
+import { UserIcon, ChevronDownIcon, SearchIcon, AdjustmentsIcon, BellIcon } from "react-native-heroicons/outline"
 import { ScrollView } from 'react-native';
 import CategoriesDish from '../components/CategoriesDish';
 import FeaturedRow from '../components/FeaturedRow';
@@ -66,7 +59,7 @@ const HomeScreen = ({navigation}) => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Locations')}>
+          <TouchableOpacity onPress={() => console.log("Notifications")}>
             <BellIcon size={30} color="#00CCBB" />
           </TouchableOpacity>
 

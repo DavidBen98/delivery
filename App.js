@@ -18,7 +18,6 @@ import LocationsScreen from './screens/LocationsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import CustomDrawerContent from './components/CustomDrawerContent';
 
-
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const navOptionHandler = () => ({
@@ -41,24 +40,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Provider store={store}>
-        <Stack.Navigator 
-          // useLegacyImplementation 
-          // drawerContent={props => 
-          //   <CustomDrawer {...props} 
-          //     screenOptions={{
-          //       headerShown: false,
-          //       drawerActiveBackgroundColor: '#00CCBB',
-          //       drawerActiveTintColor: '#fff',
-          //       drawerInactiveTintColor: '#333',
-          //       drawerLabelTintColor: '#fff',
-          //       drawerLabelStyle: {
-          //         marginLeft: -25,
-          //         fontFamily: 'Roboto-Medium',
-          //         fontSize: 15,
-          //       }
-          //   }}
-          // />}
-        >
+        <Stack.Navigator>
           <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Locations" component={LocationsScreen} options={navOptionHandler}/>
