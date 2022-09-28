@@ -9,4 +9,4 @@ const FavouriteScreen = () => {
   )
 }
 
-export default DirectionsScreen
+export default FavouriteScreen

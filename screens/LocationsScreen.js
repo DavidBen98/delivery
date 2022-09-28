@@ -9,11 +9,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
+import * as Location from 'expo-location';
+
+
 const LocationsScreen = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(selectUser);
     const [ubications, setUbications] = useState ([]);
     const navigation = useNavigation();
+  
+    const getLocationPermission = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if(status !== 'granted') {
+        alert('Permission denied');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      const current = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      }
+      setOrigin(current);
+    }
 
     useEffect(() => { 
       decodedToken();  
@@ -48,9 +65,8 @@ const LocationsScreen = () => {
     
     return (
       <>
-        <View style={{ height: '100%', width: '100%' }}>
+        <View style={{ height: '100%', width: '100%', marginTop: 20 }}>
             <View>
-                <MenuIcon size={25} style={tw `m-3`} />
                 <Text style={tw `mb-[10px] pl-4 text-xl font-semibold`}>Input your direction</Text>
                 <View style={tw `w-full relative flex`}>
                   <TextInput 

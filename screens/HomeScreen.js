@@ -43,7 +43,7 @@ const HomeScreen = ({navigation}) => {
       <SafeAreaView style={tw `bg-white pt-5 pb-2`}>
         <View style={tw `flex-row items-center justify-between px-4 space-x-2 w-full`}>
 
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
             <Image 
               source={require(`../server/dbimages/users/1.png`)}
               style={tw `h-7 w-7 bg-gray-300 p-4 rounded-full`}

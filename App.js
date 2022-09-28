@@ -8,14 +8,19 @@ import {createStackNavigator} from '@react-navigation/stack'
 import HomeScreen from './screens/HomeScreen';
 import BasketScreen from './screens/BasketScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
-// import DeliveryScreen from './screens/DeliveryScreen';
 import PreparingOrderScreen from './screens/PreparingOrderScreen';
 import ImageScreen from './screens/ImageScreen';
 import OpinionsScreen from './screens/OpinionsScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LocationsScreen from './screens/LocationsScreen';
+import DirectionsScreen from './screens/DirectionsScreen';
+import ShoppingScreen from './screens/ShoppingScreen';
+import FavouriteScreen from './screens/FavouriteScreen';
+import CouponsScreen from './screens/CouponsScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import DeliveryScreen from './screens/DeliveryScreen';
+
 import CustomDrawerContent from './components/CustomDrawerContent';
 
 const Drawer = createDrawerNavigator();
@@ -27,10 +32,15 @@ const navOptionHandler = () => ({
 function DrawerNavigator({navigation}) {
   return (
     <Drawer.Navigator 
+      useLegacyImplementation
       drawerContent={() =>             
         <CustomDrawerContent />
     }>
       <Drawer.Screen name="Home" component={HomeScreen} options={navOptionHandler}/>
+      <Drawer.Screen name="Directions" component={DirectionsScreen} options={navOptionHandler}/>
+      <Drawer.Screen name="Shopping" component={ShoppingScreen} options={navOptionHandler}/>
+      <Drawer.Screen name="Favourite" component={FavouriteScreen} options={navOptionHandler}/>
+      <Drawer.Screen name="Coupons" component={CouponsScreen} options={navOptionHandler}/>
       <Drawer.Screen name="Settings" component={SettingsScreen} options={navOptionHandler}/>
     </Drawer.Navigator>
   )
@@ -41,6 +51,7 @@ export default function App() {
     <NavigationContainer>
       <Provider store={store}>
         <Stack.Navigator>
+          <Stack.Screen name="Delivery" component={DeliveryScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Locations" component={LocationsScreen} options={navOptionHandler}/>
@@ -54,11 +65,6 @@ export default function App() {
           options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Opinions" component={OpinionsScreen} 
           options={{ presentation: 'modal', headerShown:false }}/>
-          {/* <Stack.Screen 
-            name="Delivery" 
-            component={DeliveryScreen} 
-            options={{ presentation: 'fullScreenModal', headerShown:false }}
-          /> */}
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>
