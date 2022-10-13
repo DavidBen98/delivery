@@ -86,7 +86,8 @@ export const getDataUser = async (token) => {
 }
 
 export const createToken = async (rows) => {
-  const jwt = require('jsonwebtoken');
+  // const jwt = require('jsonwebtoken');
+  
 
   const token = jwt.sign({
     id: rows[0].id,

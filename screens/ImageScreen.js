@@ -19,7 +19,6 @@ const ImageScreen = () => {
         <Image 
             source={require(`../server/dbimages/restaurants/${id}.png`)}
             style={{resizeMode: "contain", width: "100%", height: "100%", backgroundColor: "#000"}}
-            // style={"objectFit: 'contain'" && tw `w-full h-56 object-cover bg-gray-300 p-4`}
         />
         <TouchableOpacity 
             onPress={navigation.goBack}

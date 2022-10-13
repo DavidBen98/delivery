@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack'
+import {createStackNavigator} from '@react-navigation/stack';
 
 import HomeScreen from './screens/HomeScreen';
 import BasketScreen from './screens/BasketScreen';
@@ -22,6 +22,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import DeliveryScreen from './screens/DeliveryScreen';
 
 import CustomDrawerContent from './components/CustomDrawerContent';
+import DishScreen from './screens/DishScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -51,7 +52,7 @@ export default function App() {
     <NavigationContainer>
       <Provider store={store}>
         <Stack.Navigator>
-          <Stack.Screen name="Delivery" component={DeliveryScreen} options={{ presentation: 'modal', headerShown:false }}/>
+          {/* <Stack.Screen name="Delivery" component={DeliveryScreen} options={{ presentation: 'modal', headerShown:false }}/> */}
           <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Locations" component={LocationsScreen} options={navOptionHandler}/>
@@ -64,6 +65,8 @@ export default function App() {
           <Stack.Screen name="Image" component={ImageScreen} 
           options={{ presentation: 'modal', headerShown:false }}/>
           <Stack.Screen name="Opinions" component={OpinionsScreen} 
+          options={{ presentation: 'modal', headerShown:false }}/>
+          <Stack.Screen name="Dish" component={DishScreen} 
           options={{ presentation: 'modal', headerShown:false }}/>
         </Stack.Navigator>
       </Provider>

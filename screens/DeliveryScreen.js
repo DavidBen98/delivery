@@ -48,9 +48,9 @@ const DeliveryScreen = () => {
                     </View>
             </SafeAreaView>
         
-            <View style={{width:"100px", height:"200px"}}>
+            <View style={{width:"200px", height:"200px"}}>
                 <MapView
-                    initialRegion={{
+                    region={{
                         // latitude: restaurant.restaurant.lat,
                         // longitude: restaurant.restaurant.long,
                         latitude: 211,
@@ -58,8 +58,9 @@ const DeliveryScreen = () => {
                         latitudeDelta: 0.09,
                         longitudeDelta: 0.04,
                     }}
-                    style={tw `flex-1 mt-10 z-0 min-h-screen w-[500px] h-[500px]`}
+                    style={tw `flex-1 mt-10 w-[400px] h-[400px]`}
                     mapType="standard"
+                    provider={PROVIDER_GOOGLE}
                 />
 
                 {/* <Marker 
